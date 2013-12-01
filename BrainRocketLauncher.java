@@ -1,66 +1,28 @@
 package edu.turtlekit2.warbot.duckingbear;
 
-import java.util.List;
-
 import edu.turtlekit2.warbot.WarBrain;
-import edu.turtlekit2.warbot.message.WarMessage;
-import edu.turtlekit2.warbot.percepts.Percept;
+import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
+import edu.turtlekit2.warbot.duckingbear.rocketLaunchers.DefaultRocketLauncherBehavior;
 
-public class BrainRocketLauncher extends WarBrain{
+public class BrainRocketLauncher extends WarBrain {
+	private Behavior behavior;
+	private KnowledgeBase knowledgeBase;
 	
-	public BrainRocketLauncher(){
-		
+	public BrainRocketLauncher() {
+		behavior = new DefaultRocketLauncherBehavior(this);
+		knowledgeBase = new KnowledgeBase();
 	}
 	
 	@Override
 	public String action() {
-		if(!isReloaded()){
-			if(!isReloading()){
-				return "reload";
-			}
-		}
-		
-		List<Percept> listeP = getPercepts();
-		List<WarMessage> listeM = getMessage();
-		
-		
-		Percept bestPercept = null;
-		
-		if(listeM.size() == 0){
-			for(Percept p : listeP){
-				if(p.getType().equals("WarBase") && !p.getTeam().equals(getTeam())){
-					bestPercept = p;
-				}
-			}
-			
-			if(bestPercept != null){
-				broadcastMessage("WarRocketLauncher", "base", null);
-				setAngleTurret(bestPercept.getAngle());
-				return "fire";
-			}else{
-				while(isBlocked()){
-					setRandomHeading();
-				}
-				return "move";
-			}
-		}else{
-			for(Percept p : listeP){
-				if(p.getType().equals("WarBase") && !p.getTeam().equals(getTeam())){
-					bestPercept = p;
-				}
-			}
-			
-			if(bestPercept != null){
-				broadcastMessage("WarRocketLauncher", "base", null);
-				setAngleTurret(bestPercept.getAngle());
-				return "fire";
-			}else if(listeM.size()>0){
-				WarMessage tmp = listeM.get(0);
-				reply(tmp, "j'arrive", null);
-				setHeading(tmp.getAngle());
-			}
-		}
-		
-		return "move";
+		behavior.processMessages();
+		String action = behavior.act();
+		knowledgeBase.tick();
+		return action;
 	}
+	
+	public KnowledgeBase getKnowledgeBase() {
+		return knowledgeBase;
+	}
+
 }

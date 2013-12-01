@@ -1,12 +1,32 @@
 package edu.turtlekit2.warbot.duckingbear;
 
-import java.util.List;
-
 import edu.turtlekit2.warbot.WarBrain;
+import edu.turtlekit2.warbot.duckingbear.bases.DefaultBaseBehavior;
+import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
-import edu.turtlekit2.warbot.message.WarMessage;
 
-public class BrainBase extends WarBrain{
+public class BrainBase extends WarBrain {
+	private Behavior behavior;
+	private KnowledgeBase knowledgeBase;
+	
+	public BrainBase() {
+		behavior = new DefaultBaseBehavior(this);
+		knowledgeBase = new KnowledgeBase();
+	}
+
+	@Override
+	public String action() {
+		behavior.processMessages();
+		String action = behavior.act();
+		knowledgeBase.tick();
+		return action;
+	}
+	
+	public KnowledgeBase getKnowledgeBase() {
+		return knowledgeBase;
+	}
+
+	// UTILITAIRES
 	
 	//Surcharge de setNextAgentCreate afin de palier au bug du moteur
 	@Override
@@ -24,30 +44,4 @@ public class BrainBase extends WarBrain{
 		}
 		super.setNextAgentCreate(rightStr);
 	}
-
-	public BrainBase(){
-		
-	}
-
-	@Override
-	public String action() {
-		
-		if(!emptyBag()){
-			return "eat";
-		}
-		
-		List<WarMessage> liste = getMessage();
-		
-		for(WarMessage m : liste){
-			reply(m, "ici", null);
-		}
-		
-		if(getEnergy() > 12000){
-			setNextAgentCreate("Explorer");
-			return "create";
-		}
-		
-		return "idle";
-	}
-
 }
