@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import edu.turtlekit2.warbot.duckingbear.FakeMessage;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
 import edu.turtlekit2.warbot.message.WarMessage;
 
@@ -40,6 +41,40 @@ public class KnowledgeBase {
 	 * @param msg
 	 */
 	public void processMessage(WarMessage msg) {
+		if (msg.getMessage().equals("alive")) {
+			SortedMap<Integer, EntityKnowledge> a = allies.get(msg.getSenderType());
+			if (a == null) {
+				a = new TreeMap<Integer, EntityKnowledge>();
+				allies.put(msg.getSenderType(), a);
+			}
+			EntityKnowledge ent = a.get(msg.getSender());
+			if (ent == null) {
+				ent = new EntityKnowledge(msg, getTick());
+				a.put(msg.getSender(), ent);
+			} else {
+				ent.update(msg, getTick());
+			}
+		} else if (msg.getMessage().equals("ennemy")) {
+			String[] content = msg.getContent();
+			int id = Integer.parseInt(content[0]);
+			String type = content[2];
+			
+			SortedMap<Integer, EntityKnowledge> a = ennemies.get(type);
+			if (a == null) {
+				a = new TreeMap<Integer, EntityKnowledge>();
+				ennemies.put(type, a);
+			}
+			EntityKnowledge ent = a.get(id);
+			if (ent == null) {
+				ent = new EntityKnowledge(msg, getTick());
+				a.put(id, ent);
+			} else {
+				ent.update(msg, getTick());
+			}
+		}
+	}
+	
+	public void processMessage(FakeMessage msg) {
 		if (msg.getMessage().equals("alive")) {
 			SortedMap<Integer, EntityKnowledge> a = allies.get(msg.getSenderType());
 			if (a == null) {

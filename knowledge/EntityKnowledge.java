@@ -1,5 +1,6 @@
 package edu.turtlekit2.warbot.duckingbear.knowledge;
 
+import edu.turtlekit2.warbot.duckingbear.FakeMessage;
 import edu.turtlekit2.warbot.message.WarMessage;
 
 /**
@@ -18,6 +19,31 @@ public class EntityKnowledge {
 	private long tick;
 	
 	public EntityKnowledge(WarMessage msg, long tick) {
+		if (msg == null) {
+			throw new IllegalArgumentException();
+		}
+		this.tick = tick;
+		if (msg.getMessage().equals("alive")) {
+			id = msg.getSender();
+			team = msg.getSenderTeam();
+			type = msg.getSenderType();
+			x = 0; // A modifier
+			y = 0; // A modifier
+			angle = msg.getAngle();
+		} else if (msg.getMessage().equals("ennemy")) {
+			String[] content = msg.getContent();
+			id = Integer.parseInt(content[0]);
+			team = content[1];
+			type = content[2];
+			x = Integer.parseInt(content[3]);
+			y = Integer.parseInt(content[4]);
+			angle = Integer.parseInt(content[5]);
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	public EntityKnowledge(FakeMessage msg, long tick) {
 		if (msg == null) {
 			throw new IllegalArgumentException();
 		}
@@ -63,7 +89,27 @@ public class EntityKnowledge {
 			throw new IllegalArgumentException();
 		}
 	}
-	
+	public void update(FakeMessage msg, long tick) {
+		if (msg == null) {
+			throw new IllegalArgumentException();
+		}
+		this.tick = tick;
+		if (msg.getMessage() == "alive") {
+			x = 0; // A modifier
+			y = 0; // A modifier
+			angle = msg.getAngle();
+		} else if (msg.getMessage() == "ennemy") {
+			String[] content = msg.getContent();
+			id = Integer.parseInt(content[0]);
+			team = content[1];
+			type = content[2];
+			x = Integer.parseInt(content[3]);
+			y = Integer.parseInt(content[4]);
+			angle = Integer.parseInt(content[5]);
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
 	public int getID() {
 		return id;
 	}
