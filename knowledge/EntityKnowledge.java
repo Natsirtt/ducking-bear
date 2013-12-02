@@ -13,7 +13,6 @@ public class EntityKnowledge {
 	private String type;
 	private int x;
 	private int y;
-	private int angle;
 	// Le tick de dernière mise à jour
 	private long tick;
 	
@@ -29,14 +28,12 @@ public class EntityKnowledge {
 			type = msg.getSenderType();
 			x = Integer.parseInt(content[0]);
 			y = Integer.parseInt(content[1]);
-			angle = msg.getAngle();
 		} else if (msg.getMessage().equals("ennemy")) {
 			id = Integer.parseInt(content[0]);
 			team = content[1];
 			type = content[2];
 			x = Integer.parseInt(content[3]);
 			y = Integer.parseInt(content[4]);
-			angle = Integer.parseInt(content[5]);
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -51,14 +48,12 @@ public class EntityKnowledge {
 		if (msg.getMessage() == "alive") {
 			x = Integer.parseInt(content[0]);
 			y = Integer.parseInt(content[1]);
-			angle = msg.getAngle();
 		} else if (msg.getMessage() == "ennemy") {
 			id = Integer.parseInt(content[0]);
 			team = content[1];
 			type = content[2];
 			x = Integer.parseInt(content[3]);
 			y = Integer.parseInt(content[4]);
-			angle = Integer.parseInt(content[5]);
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -94,12 +89,6 @@ public class EntityKnowledge {
 	 */
 	public int getY() {
 		return y;
-	}
-	/**
-	 * Renvoie la direction de l'entité
-	 */
-	public int getAngle() {
-		return angle;
 	}
 	
 	/**

@@ -88,13 +88,28 @@ public class KnowledgeBase {
 	private void checkMainBase(FakeMessage msg) {
 		EntityKnowledge mainBase = getMainBase();
 		if ((mainBase != null) && (msg.getSender() == mainBase.getID())) {
-			x = (int) -(Math.sin(Math.toRadians(msg.getAngle())) * msg.getDistance());
-			y = (int) -(Math.cos(Math.toRadians(msg.getAngle())) * msg.getDistance());
+			x = (int) -(Math.cos(Math.toRadians(msg.getAngle())) * msg.getDistance());
+			y = (int) -(Math.sin(Math.toRadians(msg.getAngle())) * msg.getDistance());
 		}
 	}
 	
 	public EntityKnowledge getNearestEnnemy() {
-		return null;
+		EntityKnowledge nearest = null;
+		int minSquareDistance = Integer.MAX_VALUE;
+		for (SortedMap<Integer, EntityKnowledge> map : ennemies.values()) {
+			for (EntityKnowledge ek : map.values()) {
+				if (ek.getLastUpdateDuration(tick) < 10) {
+					int x2 = ek.getX();
+					int y2 = ek.getY();
+					int squareDistance = (x2-x)*(x2-x) - (y2-y)*(y2-y);
+					if (squareDistance < minSquareDistance) {
+						minSquareDistance = squareDistance;
+						nearest = ek;
+					}
+				}
+			}
+		}
+		return nearest;
 	}
 	
 	public EntityKnowledge getMainBase() {

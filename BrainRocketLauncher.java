@@ -17,7 +17,6 @@ public class BrainRocketLauncher extends WarBrain {
 	@Override
 	public String action() {
 		knowledgeBase.setID(getID());
-		behavior.processMessages();
 		String action = behavior.act();
 		knowledgeBase.tick();
 		return action;
