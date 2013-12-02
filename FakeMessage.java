@@ -1,5 +1,7 @@
 package edu.turtlekit2.warbot.duckingbear;
 
+import edu.turtlekit2.warbot.message.WarMessage;
+
 
 public class FakeMessage {
 	
@@ -10,7 +12,7 @@ public class FakeMessage {
 	private String					_message = "";
 	private String[]				_content = null;
 	
-	public FakeMessage(int id, int angle, String team, String type, String msg, String[] content){
+	public FakeMessage(int id, int angle, String team, String type, String msg, String[] content) {
 		_angle = angle;
 		_sender = id;
 		_senderTeam = team;
@@ -18,6 +20,15 @@ public class FakeMessage {
 		_message = msg;
 		_content = content;
 	}
+	
+	public FakeMessage(WarMessage msg) {
+		_angle = msg.getAngle();
+		_sender = msg.getSender();
+		_senderTeam = msg.getSenderTeam();
+		_type = msg.getSenderType();
+		_message = msg.getMessage();
+		_content = msg.getContent();
+	}	
 	
 	/**
 	 * Methode permettant de renvoyer l'angle de la direction de l'envoyeur du message. 

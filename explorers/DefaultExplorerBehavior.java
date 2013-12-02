@@ -25,7 +25,7 @@ public class DefaultExplorerBehavior implements Behavior {
 		KnowledgeBase kb = entity.getKnowledgeBase();
 		List<WarMessage> messages = entity.getMessage();
 		for (WarMessage msg : messages) {
-			kb.processMessage(msg);
+			kb.processMessage(new FakeMessage(msg));
 		}
 		for (FakeMessage msg : this.messages) {
 			kb.processMessage(msg);
