@@ -11,11 +11,12 @@ public class BrainBase extends WarBrain {
 	
 	public BrainBase() {
 		behavior = new DefaultBaseBehavior(this);
-		knowledgeBase = new KnowledgeBase();
+		knowledgeBase = new KnowledgeBase(Names.BASE);
 	}
 
 	@Override
 	public String action() {
+		knowledgeBase.setID(getID());
 		behavior.processMessages();
 		String action = behavior.act();
 		knowledgeBase.tick();

@@ -34,7 +34,7 @@ public class DefaultExplorerBehavior implements Behavior {
 	}
 	@Override
 	public String act() {
-		broadcastMessage(null, "alive", new String[0]);
+		signalAlive();
 		
 		KnowledgeBase kb = entity.getKnowledgeBase();
 		EntityKnowledge base = kb.getMainBase();
@@ -42,9 +42,16 @@ public class DefaultExplorerBehavior implements Behavior {
 			System.out.println("Je suis l'explorer #" + entity.getID() + " et je ne possède pas de base principale");
 		} else {
 			System.out.println("Je suis l'explorer #" + entity.getID() + " et je possède une base principale #" + base.getID());
+			System.out.println("    Je me trouve en (" + kb.getX() + "," + kb.getY() + ")");
 		}
 		
 		return Names.IDLE;
+	}
+	
+	public void signalAlive() {
+		KnowledgeBase kb = entity.getKnowledgeBase();
+		String[] content = new String[] {String.valueOf(kb.getX()), String.valueOf(kb.getY())};
+		broadcastMessage(null, "alive", content);
 	}
 	
 	public void broadcastMessage(String target, String msg, String[] content) {

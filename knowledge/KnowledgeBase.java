@@ -16,12 +16,26 @@ public class KnowledgeBase {
 	private Map<String, SortedMap<Integer, EntityKnowledge>> ennemies;
 	private Map<String, SortedMap<Integer, EntityKnowledge>> allies;
 	
+	int id;
+	String type;
+	
+	private int x;
+	private int y;
+	
 	private long tick;
 	
-	public KnowledgeBase() {
+	public KnowledgeBase(String type) {
 		ennemies = new HashMap<>();
 		allies = new HashMap<>();
 		tick = 0;
+		x = 0;
+		y = 0;
+		this.id = 0;
+		this.type = type;
+	}
+	
+	public void setID(int id) {
+		this.id = id;
 	}
 	
 	/**
@@ -48,6 +62,9 @@ public class KnowledgeBase {
 			} else {
 				ent.update(msg, getTick());
 			}
+			if (msg.getSenderType().equals(Names.BASE)) {
+				checkMainBase(msg);
+			}
 		} else if (msg.getMessage().equals("ennemy")) {
 			String[] content = msg.getContent();
 			int id = Integer.parseInt(content[0]);
@@ -65,6 +82,14 @@ public class KnowledgeBase {
 			} else {
 				ent.update(msg, getTick());
 			}
+		}
+	}
+	
+	private void checkMainBase(FakeMessage msg) {
+		EntityKnowledge mainBase = getMainBase();
+		if ((mainBase != null) && (msg.getSender() == mainBase.getID())) {
+			x = (int) -(Math.sin(Math.toRadians(msg.getAngle())) * msg.getDistance());
+			y = (int) -(Math.cos(Math.toRadians(msg.getAngle())) * msg.getDistance());
 		}
 	}
 	
@@ -131,5 +156,22 @@ public class KnowledgeBase {
 			}
 		}
 		return count;
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
+	
+	public String toString() {
+		String s = "";
+		s += type + "#" + id + "\n";
+		s += "x : " + getX() + ", y : " + getY() + "\n";
+		s += "Ennemies : " + ennemies + "\n";
+		s += "Alliés : " + allies + "\n";
+		return s;
 	}
 }

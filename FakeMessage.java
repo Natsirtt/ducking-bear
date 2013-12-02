@@ -6,6 +6,7 @@ import edu.turtlekit2.warbot.message.WarMessage;
 public class FakeMessage {
 	
 	private int						_angle = 0;
+	private int                     _distance = 0;
 	private int						_sender = 0;
 	private String					_senderTeam = "";
 	private String					_type = "";
@@ -23,6 +24,7 @@ public class FakeMessage {
 	
 	public FakeMessage(WarMessage msg) {
 		_angle = msg.getAngle();
+		_distance = msg.getDistance();
 		_sender = msg.getSender();
 		_senderTeam = msg.getSenderTeam();
 		_type = msg.getSenderType();
@@ -46,7 +48,7 @@ public class FakeMessage {
 	 * @return {@code int} - la distance entre l'envoyeur et le recepteur
 	 */
 	public int getDistance(){
-		return 0;
+		return _distance;
 	}
 	
 	/**

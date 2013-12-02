@@ -16,9 +16,12 @@ public class DefaultRocketLauncherBehavior implements Behavior {
 	
 	private List<FakeMessage> messages;
 	
+	private boolean firstStep;
+	
 	public DefaultRocketLauncherBehavior(BrainRocketLauncher entity) {
 		this.entity = entity;
 		messages = new LinkedList<>();
+		firstStep = true;
 	}
 
 	@Override
@@ -36,7 +39,7 @@ public class DefaultRocketLauncherBehavior implements Behavior {
 
 	@Override
 	public String act() {
-		broadcastMessage(null, "alive", new String[0]);
+		signalAlive();
 		
 		KnowledgeBase kb = entity.getKnowledgeBase();
 		EntityKnowledge base = kb.getMainBase();
@@ -44,9 +47,22 @@ public class DefaultRocketLauncherBehavior implements Behavior {
 			System.out.println("Je suis le rocketlauncher #" + entity.getID() + " et je ne possède pas de base principale");
 		} else {
 			System.out.println("Je suis le rocketlauncher #" + entity.getID() + " et je possède une base principale #" + base.getID());
+			System.out.println("    Je me trouve en (" + kb.getX() + "," + kb.getY() + ")");
 		}
 		
-		return Names.IDLE;
+		if (firstStep) {
+			firstStep = false;
+			entity.setRandomHeading();
+			return Names.MOVE;
+		} else {
+			return Names.IDLE;
+		}
+	}
+	
+	public void signalAlive() {
+		KnowledgeBase kb = entity.getKnowledgeBase();
+		String[] content = new String[] {String.valueOf(kb.getX()), String.valueOf(kb.getY())};
+		broadcastMessage("all", "alive", content);
 	}
 	
 	public void broadcastMessage(String target, String msg, String[] content) {

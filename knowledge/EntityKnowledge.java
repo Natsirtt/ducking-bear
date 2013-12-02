@@ -22,15 +22,15 @@ public class EntityKnowledge {
 			throw new IllegalArgumentException();
 		}
 		this.tick = tick;
+		String[] content = msg.getContent();
 		if (msg.getMessage().equals("alive")) {
 			id = msg.getSender();
 			team = msg.getSenderTeam();
 			type = msg.getSenderType();
-			x = 0; // A modifier
-			y = 0; // A modifier
+			x = Integer.parseInt(content[0]);
+			y = Integer.parseInt(content[1]);
 			angle = msg.getAngle();
 		} else if (msg.getMessage().equals("ennemy")) {
-			String[] content = msg.getContent();
 			id = Integer.parseInt(content[0]);
 			team = content[1];
 			type = content[2];
@@ -47,12 +47,12 @@ public class EntityKnowledge {
 			throw new IllegalArgumentException();
 		}
 		this.tick = tick;
+		String[] content = msg.getContent();
 		if (msg.getMessage() == "alive") {
-			x = 0; // A modifier
-			y = 0; // A modifier
+			x = Integer.parseInt(content[0]);
+			y = Integer.parseInt(content[1]);
 			angle = msg.getAngle();
 		} else if (msg.getMessage() == "ennemy") {
-			String[] content = msg.getContent();
 			id = Integer.parseInt(content[0]);
 			team = content[1];
 			type = content[2];
@@ -63,6 +63,13 @@ public class EntityKnowledge {
 			throw new IllegalArgumentException();
 		}
 	}
+	public String toString() {
+		String s = "";
+		s += type + "#" + id + " ";
+		s += "x : " + getX() + ", y : " + getY() + "";
+		return s;
+	}
+	
 	public int getID() {
 		return id;
 	}
