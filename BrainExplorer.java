@@ -5,11 +5,11 @@ import edu.turtlekit2.warbot.duckingbear.explorers.DefaultExplorerBehavior;
 import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
 
-public class BrainExplorer extends WarBrain{
+public class BrainExplorer extends WarBrain implements Entity {
 	private Behavior behavior;
 	private KnowledgeBase knowledgeBase;
 	
-	public BrainExplorer(){
+	public BrainExplorer() {
 		behavior = new DefaultExplorerBehavior(this);
 		knowledgeBase = new KnowledgeBase(Names.EXPLORER);
 	}
@@ -25,5 +25,13 @@ public class BrainExplorer extends WarBrain{
 	public KnowledgeBase getKnowledgeBase() {
 		return knowledgeBase;
 	}
+	
+	public void setBehavior(Behavior behavior) {
+		this.behavior = behavior;
+	}
 
+	@Override
+	public WarBrain getEntity() {
+		return this;
+	}
 }

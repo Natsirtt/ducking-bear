@@ -1,21 +1,21 @@
 package edu.turtlekit2.warbot.duckingbear.explorers;
 
 import edu.turtlekit2.warbot.duckingbear.AbstractBehavior;
-import edu.turtlekit2.warbot.duckingbear.BrainExplorer;
+import edu.turtlekit2.warbot.duckingbear.Entity;
 import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
 import edu.turtlekit2.warbot.message.WarMessage;
 
 public class DefaultExplorerBehavior extends AbstractBehavior {
-	private BrainExplorer entity;
+	private Entity entity;
 	
-	public DefaultExplorerBehavior(BrainExplorer entity) {
+	public DefaultExplorerBehavior(Entity entity) {
 		super(entity);
 		this.entity = entity;
 	}
 
 	@Override
-	protected void processMessage(WarMessage msg) {
+	public void processMessage(WarMessage msg) {
 
 	}
 	
@@ -27,10 +27,10 @@ public class DefaultExplorerBehavior extends AbstractBehavior {
 	}
 
 	@Override
-	protected KnowledgeBase getKnowledgeBase() {
+	public KnowledgeBase getKnowledgeBase() {
 		return entity.getKnowledgeBase();
 	}
-	protected String getType() {
+	public String getType() {
 		return Names.EXPLORER;
 	}
 }

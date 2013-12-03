@@ -5,7 +5,7 @@ import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
 import edu.turtlekit2.warbot.duckingbear.rocketLaunchers.DefaultRocketLauncherBehavior;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
 
-public class BrainRocketLauncher extends WarBrain {
+public class BrainRocketLauncher extends WarBrain implements Entity {
 	private Behavior behavior;
 	private KnowledgeBase knowledgeBase;
 	
@@ -24,6 +24,15 @@ public class BrainRocketLauncher extends WarBrain {
 	
 	public KnowledgeBase getKnowledgeBase() {
 		return knowledgeBase;
+	}
+	
+	public void setBehavior(Behavior behavior) {
+		this.behavior = behavior;
+	}
+
+	@Override
+	public WarBrain getEntity() {
+		return this;
 	}
 
 }

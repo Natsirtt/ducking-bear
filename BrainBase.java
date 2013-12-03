@@ -5,7 +5,7 @@ import edu.turtlekit2.warbot.duckingbear.bases.DefaultBaseBehavior;
 import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
 
-public class BrainBase extends WarBrain {
+public class BrainBase extends WarBrain implements Entity {
 	private Behavior behavior;
 	private KnowledgeBase knowledgeBase;
 	
@@ -25,7 +25,11 @@ public class BrainBase extends WarBrain {
 	public KnowledgeBase getKnowledgeBase() {
 		return knowledgeBase;
 	}
-
+	
+	public void setBehavior(Behavior behavior) {
+		this.behavior = behavior;
+	}
+	
 	// UTILITAIRES
 	
 	//Surcharge de setNextAgentCreate afin de palier au bug du moteur
@@ -43,5 +47,10 @@ public class BrainBase extends WarBrain {
 			throw new IllegalArgumentException("Impossible to create a " + agent);
 		}
 		super.setNextAgentCreate(rightStr);
+	}
+
+	@Override
+	public WarBrain getEntity() {
+		return this;
 	}
 }

@@ -18,17 +18,17 @@ import edu.turtlekit2.warbot.percepts.Percept;
  */
 public abstract class AbstractBehavior implements Behavior {
 	
-	private WarBrain entity;
+	private Entity entity;
 	private List<FakeMessage> messages;
 	
-	public AbstractBehavior(WarBrain entity) {
+	public AbstractBehavior(Entity entity) {
 		this.entity = entity;
 		messages = new LinkedList<>();
 	}
 
 	private void processMessages() {
 		KnowledgeBase kb = getKnowledgeBase();
-		List<WarMessage> messages = entity.getMessage();
+		List<WarMessage> messages = entity.getEntity().getMessage();
 		for (WarMessage msg : messages) {
 			kb.processMessage(new FakeMessage(msg));
 			processMessage(msg);
@@ -42,9 +42,9 @@ public abstract class AbstractBehavior implements Behavior {
 	@Override
 	public String act() {
 		processMessages();
-		List<Percept> percepts = entity.getPercepts();
+		List<Percept> percepts = entity.getEntity().getPercepts();
 		for (Percept percept : percepts) {
-			if (!percept.getTeam().equals(entity.getTeam()) && 
+			if (!percept.getTeam().equals(entity.getEntity().getTeam()) && 
 					!percept.getType().equals(Names.FOOD)) {
 				signalEnnemy(percept);
 			}
@@ -74,14 +74,9 @@ public abstract class AbstractBehavior implements Behavior {
 	}
 
 	public void broadcastMessage(String target, String msg, String[] content) {
-		entity.broadcastMessage(target, msg, content);
-		messages.add(new FakeMessage(entity.getID(), entity.getHeading(), entity.getTeam(), getType(), msg, content));
+		WarBrain ent = entity.getEntity();
+		ent.broadcastMessage(target, msg, content);
+		messages.add(new FakeMessage(ent.getID(), ent.getHeading(), ent.getTeam(), getType(), msg, content));
 	}
-	
-	abstract protected KnowledgeBase getKnowledgeBase();
-	
-	abstract protected String getType();
-	
-	abstract protected void processMessage(WarMessage msg);
 
 }
