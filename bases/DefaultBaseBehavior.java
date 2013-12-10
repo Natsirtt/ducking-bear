@@ -29,7 +29,7 @@ public class DefaultBaseBehavior extends AbstractBehavior {
 		
 		if (!sent) {
 			String cmp = "edu.turtlekit2.warbot.duckingbear.rocketLaunchers.FireTestRocketLauncherBehavior";
-			entity.setBehavior(new ManagerBehavior(entity, this, Names.ROCKET_LAUNCHER, 2, cmp));
+			entity.setBehavior(new ManagerBehavior(entity, this, Names.ROCKET_LAUNCHER, 5, cmp));
 			sent = true;
 		}
 		return Names.IDLE;

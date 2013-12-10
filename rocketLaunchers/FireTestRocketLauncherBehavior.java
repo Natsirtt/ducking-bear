@@ -26,13 +26,18 @@ public class FireTestRocketLauncherBehavior extends AbstractBehavior {
 		super.act();
 		WarBrain ent = entity.getEntity();
 		KnowledgeBase kb = entity.getKnowledgeBase();
+		if (ent.isBlocked()) {
+			ent.setRandomHeading();
+		}
 		
 		System.out.println("Je suis le rocket launcher #" + 
-							entity.getEntity().getID() + " et je cherche quelqu'un à tuer");
+							entity.getEntity().getID() + " et je cherche quelqu'un à tuer en " +
+							kb.getX() + " " + kb.getY());
 		
 		if (ent.isReloaded()) {
 			EntityKnowledge nearest = kb.getNearestEnnemy();
 			if (nearest != null) {
+				System.out.println("Je suis #" + ent.getID() + " et j'attaque #" + nearest.getID());
 				int angle = getAngle(kb.getX(), nearest.getX(), kb.getY(), nearest.getY());
 				ent.setAngleTurret(angle);
 				return Names.FIRE;

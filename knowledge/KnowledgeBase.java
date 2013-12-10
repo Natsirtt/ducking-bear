@@ -95,15 +95,13 @@ public class KnowledgeBase {
 	
 	public EntityKnowledge getNearestEnnemy() {
 		EntityKnowledge nearest = null;
-		int minSquareDistance = Integer.MAX_VALUE;
+		int minDistance = Integer.MAX_VALUE;
 		for (SortedMap<Integer, EntityKnowledge> map : ennemies.values()) {
 			for (EntityKnowledge ek : map.values()) {
-				if (ek.getLastUpdateDuration(tick) < 10) {
-					int x2 = ek.getX();
-					int y2 = ek.getY();
-					int squareDistance = (x2-x)*(x2-x) - (y2-y)*(y2-y);
-					if (squareDistance < minSquareDistance) {
-						minSquareDistance = squareDistance;
+				if (ek.getLastUpdateDuration(tick) < 2) {
+					int distance = ek.getDistance(ek.getX(), ek.getY());
+					if (distance < minDistance) {
+						minDistance = distance;
 						nearest = ek;
 					}
 				}

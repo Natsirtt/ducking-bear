@@ -98,4 +98,9 @@ public class EntityKnowledge {
 	public long getLastUpdateDuration(long actualTick) {
 		return actualTick - tick;
 	}
+	
+	public int getDistance(int x2, int y2) {
+		int squareDistance = (x2-x)*(x2-x) + (y2-y)*(y2-y);
+		return (int) Math.sqrt(squareDistance);
+	}
 }
