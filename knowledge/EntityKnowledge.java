@@ -13,6 +13,7 @@ public class EntityKnowledge {
 	private String type;
 	private int x;
 	private int y;
+	private int teamNumber;
 	// Le tick de dernière mise à jour
 	private long tick;
 	
@@ -28,12 +29,14 @@ public class EntityKnowledge {
 			type = msg.getSenderType();
 			x = Integer.parseInt(content[0]);
 			y = Integer.parseInt(content[1]);
+			teamNumber = Integer.parseInt(content[2]);
 		} else if (msg.getMessage().equals("ennemy")) {
 			id = Integer.parseInt(content[0]);
 			team = content[1];
 			type = content[2];
 			x = Integer.parseInt(content[3]);
 			y = Integer.parseInt(content[4]);
+			teamNumber = 0;
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -48,6 +51,7 @@ public class EntityKnowledge {
 		if (msg.getMessage() == "alive") {
 			x = Integer.parseInt(content[0]);
 			y = Integer.parseInt(content[1]);
+			teamNumber = Integer.parseInt(content[2]);
 		} else if (msg.getMessage() == "ennemy") {
 			id = Integer.parseInt(content[0]);
 			team = content[1];
@@ -102,5 +106,9 @@ public class EntityKnowledge {
 	public int getDistance(int x2, int y2) {
 		int squareDistance = (x2-x)*(x2-x) + (y2-y)*(y2-y);
 		return (int) Math.sqrt(squareDistance);
+	}
+	
+	public int getTeamNumber() {
+		return teamNumber;
 	}
 }

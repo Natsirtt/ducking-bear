@@ -10,7 +10,7 @@ public class BrainBase extends WarBrain implements Entity {
 	private KnowledgeBase knowledgeBase;
 	
 	public BrainBase() {
-		behavior = new DefaultBaseBehavior(this);
+		behavior = new DefaultBaseBehavior(this, 0);
 		knowledgeBase = new KnowledgeBase(Names.BASE);
 	}
 

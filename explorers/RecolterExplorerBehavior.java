@@ -4,6 +4,8 @@ import java.util.List;
 
 import edu.turtlekit2.warbot.duckingbear.AbstractBehavior;
 import edu.turtlekit2.warbot.duckingbear.Entity;
+import edu.turtlekit2.warbot.duckingbear.knowledge.EntityKnowledge;
+import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
 import edu.turtlekit2.warbot.message.WarMessage;
 import edu.turtlekit2.warbot.percepts.Percept;
@@ -30,8 +32,8 @@ public class RecolterExplorerBehavior extends AbstractBehavior {
 		}
 	}
 	
-	public RecolterExplorerBehavior(Entity entity) {
-		super(entity);
+	public RecolterExplorerBehavior(Entity entity, int teamNumber) {
+		super(entity, teamNumber);
 		//Default task
 		pTask = Task.SEARCH_FOOD;
 	}
@@ -41,7 +43,18 @@ public class RecolterExplorerBehavior extends AbstractBehavior {
 		//TODO quelque chose du genre pour avoir le heading vers une
 		//TODO EntityKnowledge directement.
 		//getEntity().getKnowledgeBase().getMainBase()
-		return Names.IDLE;
+		KnowledgeBase kb = getEntity().getKnowledgeBase();
+		EntityKnowledge ke = kb.getMainBase();
+		int dst = kb.getDistance(ke.getID());
+		if (dst <= 1) {
+			pTask = Task.SEARCH_FOOD;
+			getEntity().getBrain().setAgentToGive(ke.getID());
+			return Names.GIVE;
+		} else {
+			int heading = kb.getHeading(ke.getID());
+			getEntity().getBrain().setHeading(heading);
+			return Names.MOVE;			
+		}
 	}
 	
 	private String searchFood() {

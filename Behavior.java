@@ -11,9 +11,11 @@ public interface Behavior {
 	 */
 	String act();
 	
-	public void processMessage(WarMessage msg);
+	void processMessage(WarMessage msg);
 	
-	public KnowledgeBase getKnowledgeBase();
+	KnowledgeBase getKnowledgeBase();
 	
-	public String getType();
+	String getType();
+	
+	int getTeamNumber();
 }

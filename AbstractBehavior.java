@@ -20,9 +20,11 @@ public abstract class AbstractBehavior implements Behavior {
 	
 	private Entity entity;
 	private List<FakeMessage> messages;
+	private int teamNumber;
 	
-	public AbstractBehavior(Entity entity) {
+	public AbstractBehavior(Entity entity, int teamNumber) {
 		this.entity = entity;
+		this.teamNumber = teamNumber;
 		messages = new LinkedList<>();
 	}
 
@@ -69,7 +71,10 @@ public abstract class AbstractBehavior implements Behavior {
 	
 	private void signalAlive() {
 		KnowledgeBase kb = getKnowledgeBase();
-		String[] content = new String[] {String.valueOf(kb.getX()), String.valueOf(kb.getY())};
+		String[] content = new String[] {
+				String.valueOf(kb.getX()), 
+				String.valueOf(kb.getY()), 
+				String.valueOf(getTeamNumber())};
 		broadcastMessage("all", "alive", content);
 	}
 
@@ -86,5 +91,9 @@ public abstract class AbstractBehavior implements Behavior {
 	
 	protected Entity getEntity() {
 		return this.entity;
+	}
+	
+	public int getTeamNumber() {
+		return teamNumber;
 	}
 }

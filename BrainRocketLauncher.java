@@ -10,7 +10,7 @@ public class BrainRocketLauncher extends WarBrain implements Entity {
 	private KnowledgeBase knowledgeBase;
 	
 	public BrainRocketLauncher() {
-		behavior = new DefaultRocketLauncherBehavior(this);
+		behavior = new DefaultRocketLauncherBehavior(this, 0);
 		knowledgeBase = new KnowledgeBase(Names.ROCKET_LAUNCHER);
 	}
 	

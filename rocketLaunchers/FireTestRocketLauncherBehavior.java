@@ -10,8 +10,8 @@ import edu.turtlekit2.warbot.message.WarMessage;
 import edu.turtlekit2.warbot.waritems.WarRocket;
 
 public class FireTestRocketLauncherBehavior extends AbstractBehavior {			
-	public FireTestRocketLauncherBehavior(Entity entity) {
-		super(entity);
+	public FireTestRocketLauncherBehavior(Entity entity, int teamNumber) {
+		super(entity, teamNumber);
 	}
 
 	@Override

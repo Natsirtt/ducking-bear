@@ -18,7 +18,7 @@ public class ManagerBehavior extends AbstractBehavior {
 	private String newBehavior;
 	
 	public ManagerBehavior(Entity entity, Behavior oldBehavior, String type, int number, String newBehavior) {
-		super(entity);
+		super(entity, oldBehavior.getTeamNumber());
 		this.oldBehavior = oldBehavior;
 		this.entity = entity;
 		this.type = type;

@@ -10,8 +10,8 @@ import edu.turtlekit2.warbot.message.WarMessage;
 public class DefaultExplorerBehavior extends AbstractBehavior {
 	private Entity entity;
 	
-	public DefaultExplorerBehavior(Entity entity) {
-		super(entity);
+	public DefaultExplorerBehavior(Entity entity, int teamNumber) {
+		super(entity, teamNumber);
 		this.entity = entity;
 	}
 

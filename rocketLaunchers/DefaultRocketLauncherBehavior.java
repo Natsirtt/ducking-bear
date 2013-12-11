@@ -9,8 +9,8 @@ import edu.turtlekit2.warbot.message.WarMessage;
 
 public class DefaultRocketLauncherBehavior extends AbstractBehavior {
 			
-	public DefaultRocketLauncherBehavior(Entity entity) {
-		super(entity);
+	public DefaultRocketLauncherBehavior(Entity entity, int teamNumber) {
+		super(entity, teamNumber);
 	}
 
 	@Override

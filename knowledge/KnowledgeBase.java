@@ -180,6 +180,55 @@ public class KnowledgeBase {
 		return y;
 	}
 	
+	public EntityKnowledge getEntity(int id) {
+		for (SortedMap<Integer, EntityKnowledge> map : allies.values()) {
+			for (EntityKnowledge ke : map.values()) {
+				if (ke.getID() == id) {
+					return ke;
+				}
+			}
+		}
+		for (SortedMap<Integer, EntityKnowledge> map : ennemies.values()) {
+			for (EntityKnowledge ke : map.values()) {
+				if (ke.getID() == id) {
+					return ke;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Renvoie la direction vers une entité.
+	 * @param id L'id de l'entité vers laquelle on se dirige.
+	 * @return
+	 */
+	public int getHeading(int id) {
+		int angle = 0;
+		EntityKnowledge ke = getEntity(id);
+		if (ke != null) {
+			double radian = Math.atan2((ke.getY() - y), (ke.getX() - x));
+			angle = (int) Math.toDegrees(radian);
+			return angle;
+		}
+		return 0;
+	}
+	
+	/**
+	 * Renvoie la direction vers une entité.
+	 * @param id L'id de l'entité vers laquelle on se dirige.
+	 * @return
+	 */
+	public int getDistance(int id) {
+		int dst = 0;
+		EntityKnowledge ke = getEntity(id);
+		if (ke != null) {
+			dst = (int) Math.sqrt((ke.getY() - y) * (ke.getY() - y) + (ke.getX() - x) * (ke.getX() - x));
+			return dst;
+		}
+		return 0;
+	}
+	
 	public String toString() {
 		String s = "";
 		s += type + "#" + id + "\n";

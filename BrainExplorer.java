@@ -10,7 +10,7 @@ public class BrainExplorer extends WarBrain implements Entity {
 	private KnowledgeBase knowledgeBase;
 	
 	public BrainExplorer() {
-		behavior = new DefaultExplorerBehavior(this);
+		behavior = new DefaultExplorerBehavior(this, 0);
 		knowledgeBase = new KnowledgeBase(Names.EXPLORER);
 	}
 	

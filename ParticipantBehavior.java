@@ -11,7 +11,7 @@ public class ParticipantBehavior extends AbstractBehavior {
 	private Entity entity;
 	
 	public ParticipantBehavior(Entity entity, Behavior oldBehavior) {
-		super(entity);
+		super(entity, oldBehavior.getTeamNumber());
 		this.oldBehavior = oldBehavior;
 		this.entity = entity;
 	}
@@ -29,7 +29,9 @@ public class ParticipantBehavior extends AbstractBehavior {
 		if (msg.getMessage().equals("acceptParticipant")) {
 			String[] content = msg.getContent();
 			try {
-				Behavior b = (Behavior) Class.forName(content[1]).getConstructor(Entity.class).newInstance(entity);
+				Behavior b = (Behavior) Class.forName(content[1])
+											.getConstructor(Entity.class, int.class)
+												.newInstance(entity, Integer.parseInt(content[0]));
 				entity.setBehavior(b);
 			} catch (InstantiationException | IllegalAccessException
 					| IllegalArgumentException | InvocationTargetException

@@ -11,8 +11,8 @@ public class DefaultBaseBehavior extends AbstractBehavior {
 	private boolean sent;
 
 	
-	public DefaultBaseBehavior(Entity entity) {
-		super(entity);
+	public DefaultBaseBehavior(Entity entity, int teamNumber) {
+		super(entity, teamNumber);
 		sent = false;
 	}
 
