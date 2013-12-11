@@ -59,16 +59,16 @@ public class ManagerBehavior extends AbstractBehavior {
 		oldBehavior.processMessage(msg);
 		if (msg.getMessage().equals("acceptContrat")) {
 			if (positiveAnswers < number) {
-				entity.getEntity().reply(msg, "acceptParticipant", msg.getContent());
+				entity.getBrain().reply(msg, "acceptParticipant", msg.getContent());
 			} else {
-				entity.getEntity().reply(msg, "refuseParticipant", msg.getContent());
+				entity.getBrain().reply(msg, "refuseParticipant", msg.getContent());
 			}
 			answer++;
 			positiveAnswers++;
 		} else if (msg.getMessage().equals("refuseContrat")) {
 			answer++;
 		} else if (msg.getMessage().equals("newContrat")) {
-			entity.getEntity().reply(msg, "refuseContrat", msg.getContent());
+			entity.getBrain().reply(msg, "refuseContrat", msg.getContent());
 		}
 	}
 
@@ -84,6 +84,6 @@ public class ManagerBehavior extends AbstractBehavior {
 	
 	private void sendContract() {
 		String[] content = new String[]{String.valueOf(contratID), newBehavior};
-		entity.getEntity().broadcastMessage(type, "newContrat", content);
+		entity.getBrain().broadcastMessage(type, "newContrat", content);
 	}
 }

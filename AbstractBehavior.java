@@ -28,7 +28,7 @@ public abstract class AbstractBehavior implements Behavior {
 
 	private void processMessages() {
 		KnowledgeBase kb = getKnowledgeBase();
-		List<WarMessage> messages = entity.getEntity().getMessage();
+		List<WarMessage> messages = entity.getBrain().getMessage();
 		for (WarMessage msg : messages) {
 			kb.processMessage(new FakeMessage(msg));
 			processMessage(msg);
@@ -42,9 +42,9 @@ public abstract class AbstractBehavior implements Behavior {
 	@Override
 	public String act() {
 		processMessages();
-		List<Percept> percepts = entity.getEntity().getPercepts();
+		List<Percept> percepts = entity.getBrain().getPercepts();
 		for (Percept percept : percepts) {
-			if (!percept.getTeam().equals(entity.getEntity().getTeam()) && 
+			if (!percept.getTeam().equals(entity.getBrain().getTeam()) && 
 					!percept.getType().equals(Names.FOOD)) {
 				signalEnnemy(percept);
 			}
@@ -74,9 +74,17 @@ public abstract class AbstractBehavior implements Behavior {
 	}
 
 	public void broadcastMessage(String target, String msg, String[] content) {
-		WarBrain ent = entity.getEntity();
+		WarBrain ent = entity.getBrain();
 		ent.broadcastMessage(target, msg, content);
 		messages.add(new FakeMessage(ent.getID(), ent.getHeading(), ent.getTeam(), getType(), msg, content));
 	}
 
+	@Override
+	public KnowledgeBase getKnowledgeBase() {
+		return entity.getKnowledgeBase();
+	}
+	
+	protected Entity getEntity() {
+		return this.entity;
+	}
 }

@@ -9,12 +9,9 @@ import edu.turtlekit2.warbot.duckingbear.utils.Names;
 import edu.turtlekit2.warbot.message.WarMessage;
 import edu.turtlekit2.warbot.waritems.WarRocket;
 
-public class FireTestRocketLauncherBehavior extends AbstractBehavior {
-	private Entity entity;
-			
+public class FireTestRocketLauncherBehavior extends AbstractBehavior {			
 	public FireTestRocketLauncherBehavior(Entity entity) {
 		super(entity);
-		this.entity = entity;
 	}
 
 	@Override
@@ -25,14 +22,14 @@ public class FireTestRocketLauncherBehavior extends AbstractBehavior {
 	@Override
 	public String act() {
 		super.act();
-		WarBrain ent = entity.getEntity();
-		KnowledgeBase kb = entity.getKnowledgeBase();
+		WarBrain ent = getEntity().getBrain();
+		KnowledgeBase kb = getEntity().getKnowledgeBase();
 		if (ent.isBlocked()) {
 			ent.setRandomHeading();
 		}
 		
 		System.out.println("Je suis le rocket launcher #" + 
-							entity.getEntity().getID() + " et je cherche quelqu'un à tuer en " +
+							getEntity().getBrain().getID() + " et je cherche quelqu'un à tuer en " +
 							kb.getX() + " " + kb.getY());
 		
 		if (ent.isReloaded()) {
@@ -41,7 +38,7 @@ public class FireTestRocketLauncherBehavior extends AbstractBehavior {
 				System.out.println("Je suis #" + ent.getID() + " et j'attaque #" + nearest.getID());
 				int angle = getAngle(kb.getX(), nearest.getX(), kb.getY(), nearest.getY());
 				ent.setAngleTurret(angle);
-				if (nearest.getDistance(getKnowledgeBase().getX(), getKnowledgeBase().getY()) <= 60 + 10) { //TODO mettre une constante et non 60
+				if (nearest.getDistance(getKnowledgeBase().getX(), getKnowledgeBase().getY()) <= 23 * WarRocket.SPEED + 10) {//10 pour avoir une marge //TODO passer de 23 à WarRocket.AUTONOMY lorsque warbot sera corrigé
 					return Names.FIRE;
 				}
 			}
@@ -50,11 +47,6 @@ public class FireTestRocketLauncherBehavior extends AbstractBehavior {
 		}
 		
 		return Names.MOVE;
-	}
-
-	@Override
-	public KnowledgeBase getKnowledgeBase() {
-		return entity.getKnowledgeBase();
 	}
 	
 	public String getType() {

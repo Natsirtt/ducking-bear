@@ -8,14 +8,11 @@ import edu.turtlekit2.warbot.duckingbear.utils.Names;
 import edu.turtlekit2.warbot.message.WarMessage;
 
 public class DefaultBaseBehavior extends AbstractBehavior {
-	private Entity entity;
-	
 	private boolean sent;
 
 	
 	public DefaultBaseBehavior(Entity entity) {
 		super(entity);
-		this.entity = entity;
 		sent = false;
 	}
 
@@ -27,17 +24,24 @@ public class DefaultBaseBehavior extends AbstractBehavior {
 	public String act() {
 		super.act();
 		
-		if (!sent) {
+		/*if (!sent) {
 			String cmp = "edu.turtlekit2.warbot.duckingbear.rocketLaunchers.FireTestRocketLauncherBehavior";
-			entity.setBehavior(new ManagerBehavior(entity, this, Names.ROCKET_LAUNCHER, 5, cmp));
+			entity.setBehavior(new ManagerBehavior(getEntity(), this, Names.ROCKET_LAUNCHER, 5, cmp));
+			sent = true;
+		}*/
+		
+		if (!sent) {
+			String cmp = "edu.turtlekit2.warbot.duckingbear.explorers.RecolterExplorerBehavior";
+			getEntity().setBehavior(new ManagerBehavior(getEntity(), this, Names.EXPLORER, 5, cmp));
 			sent = true;
 		}
+		
 		return Names.IDLE;
 	}
 
 	@Override
 	public KnowledgeBase getKnowledgeBase() {
-		return entity.getKnowledgeBase();
+		return getEntity().getKnowledgeBase();
 	}
 	
 	public String getType() {

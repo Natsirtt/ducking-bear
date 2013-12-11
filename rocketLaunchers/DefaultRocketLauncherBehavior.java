@@ -8,18 +8,19 @@ import edu.turtlekit2.warbot.duckingbear.utils.Names;
 import edu.turtlekit2.warbot.message.WarMessage;
 
 public class DefaultRocketLauncherBehavior extends AbstractBehavior {
-	private Entity entity;
 			
 	public DefaultRocketLauncherBehavior(Entity entity) {
 		super(entity);
-		this.entity = entity;
 	}
 
 	@Override
 	public void processMessage(WarMessage msg) {
+		//TODO les variables type "newContrat", "acceptContrat" etc... font partie
+		//TODO du protocole des contrats. Il nous faudrait 1/une rapide spécification
+		//TODO histoire d'être tous d'accord, mais surtout des constantes pour ne pas faire d'erreur
 		if (msg.getMessage().equals("newContrat")) {
-			entity.getEntity().reply(msg, "acceptContrat", msg.getContent());
-			entity.setBehavior(new ParticipantBehavior(entity, this));
+			getEntity().getBrain().reply(msg, "acceptContrat", msg.getContent());
+			getEntity().setBehavior(new ParticipantBehavior(getEntity(), this));
 		}
 	}
 
@@ -32,7 +33,7 @@ public class DefaultRocketLauncherBehavior extends AbstractBehavior {
 
 	@Override
 	public KnowledgeBase getKnowledgeBase() {
-		return entity.getKnowledgeBase();
+		return getEntity().getKnowledgeBase();
 	}
 	
 	public String getType() {

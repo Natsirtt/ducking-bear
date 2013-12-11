@@ -29,18 +29,19 @@ public class ParticipantBehavior extends AbstractBehavior {
 		if (msg.getMessage().equals("acceptParticipant")) {
 			String[] content = msg.getContent();
 			try {
-				Behavior b = (Behavior)Class.forName(content[1]).getConstructor(Entity.class).newInstance(entity);
+				Behavior b = (Behavior) Class.forName(content[1]).getConstructor(Entity.class).newInstance(entity);
 				entity.setBehavior(b);
 			} catch (InstantiationException | IllegalAccessException
 					| IllegalArgumentException | InvocationTargetException
 					| NoSuchMethodException | SecurityException
 					| ClassNotFoundException e) {
+				System.err.println("Le cast du behavior a échoué");
 				e.printStackTrace();
 			}
 		} else if (msg.getMessage().equals("refuseParticipant")) {
 			entity.setBehavior(oldBehavior);
 		} else if (msg.getMessage().equals("newContrat")) {
-			entity.getEntity().reply(msg, "refuseContrat", msg.getContent());
+			entity.getBrain().reply(msg, "refuseContrat", msg.getContent());
 		}
 	}
 

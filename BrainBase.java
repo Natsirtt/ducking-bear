@@ -50,7 +50,7 @@ public class BrainBase extends WarBrain implements Entity {
 	}
 
 	@Override
-	public WarBrain getEntity() {
+	public WarBrain getBrain() {
 		return this;
 	}
 }
