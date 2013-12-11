@@ -7,6 +7,7 @@ import edu.turtlekit2.warbot.duckingbear.knowledge.EntityKnowledge;
 import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
 import edu.turtlekit2.warbot.message.WarMessage;
+import edu.turtlekit2.warbot.waritems.WarRocket;
 
 public class FireTestRocketLauncherBehavior extends AbstractBehavior {
 	private Entity entity;
@@ -40,7 +41,9 @@ public class FireTestRocketLauncherBehavior extends AbstractBehavior {
 				System.out.println("Je suis #" + ent.getID() + " et j'attaque #" + nearest.getID());
 				int angle = getAngle(kb.getX(), nearest.getX(), kb.getY(), nearest.getY());
 				ent.setAngleTurret(angle);
-				return Names.FIRE;
+				if (nearest.getDistance(getKnowledgeBase().getX(), getKnowledgeBase().getY()) <= 60 + 10) { //TODO mettre une constante et non 60
+					return Names.FIRE;
+				}
 			}
 		} else if (!ent.isReloading()) {
 			return Names.RELOAD;

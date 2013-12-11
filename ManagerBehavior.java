@@ -5,7 +5,7 @@ import edu.turtlekit2.warbot.duckingbear.utils.Names;
 import edu.turtlekit2.warbot.message.WarMessage;
 
 public class ManagerBehavior extends AbstractBehavior {
-	public static int contrat_number = 0;
+	public static int contract_number = 0;
 	
 	private Behavior oldBehavior;
 	private Entity entity;
@@ -24,7 +24,7 @@ public class ManagerBehavior extends AbstractBehavior {
 		this.type = type;
 		this.number = number;
 		sent = false;
-		contratID = contrat_number++;
+		contratID = contract_number++;
 		answer = 0;
 		positiveAnswers = 0;
 		this.newBehavior = newBehavior;
@@ -34,7 +34,7 @@ public class ManagerBehavior extends AbstractBehavior {
 	public String act() {
 		super.act();
 		if (!sent) {
-			sendContrat();
+			sendContract();
 			sent = true;
 		} else {
 			KnowledgeBase kb = getKnowledgeBase();
@@ -82,7 +82,7 @@ public class ManagerBehavior extends AbstractBehavior {
 		return oldBehavior.getType();
 	}
 	
-	private void sendContrat() {
+	private void sendContract() {
 		String[] content = new String[]{String.valueOf(contratID), newBehavior};
 		entity.getEntity().broadcastMessage(type, "newContrat", content);
 	}

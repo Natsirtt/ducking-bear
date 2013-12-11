@@ -96,10 +96,10 @@ public class KnowledgeBase {
 	public EntityKnowledge getNearestEnnemy() {
 		EntityKnowledge nearest = null;
 		int minDistance = Integer.MAX_VALUE;
-		for (SortedMap<Integer, EntityKnowledge> map : ennemies.values()) {
+		for (Map<Integer, EntityKnowledge> map : ennemies.values()) {
 			for (EntityKnowledge ek : map.values()) {
 				if (ek.getLastUpdateDuration(tick) < 2) {
-					int distance = ek.getDistance(ek.getX(), ek.getY());
+					int distance = ek.getDistance(getX(), getY());
 					if (distance < minDistance) {
 						minDistance = distance;
 						nearest = ek;
@@ -107,6 +107,7 @@ public class KnowledgeBase {
 				}
 			}
 		}
+		System.out.println("La distance = " + minDistance);
 		return nearest;
 	}
 	
