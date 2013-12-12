@@ -1,6 +1,8 @@
 package edu.turtlekit2.warbot.duckingbear.knowledge;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -107,7 +109,6 @@ public class KnowledgeBase {
 				}
 			}
 		}
-		System.out.println("La distance = " + minDistance);
 		return nearest;
 	}
 	
@@ -227,6 +228,18 @@ public class KnowledgeBase {
 			return dst;
 		}
 		return 0;
+	}
+	
+	public List<EntityKnowledge> getTeam(int id) {
+		List<EntityKnowledge> lek = new LinkedList<EntityKnowledge>();
+		for (SortedMap<Integer, EntityKnowledge> map : allies.values()) {
+			for (EntityKnowledge ke : map.values()) {
+				if (ke.getTeamNumber() == id) {
+					lek.add(ke);
+				}
+			}
+		}
+		return lek;
 	}
 	
 	public String toString() {

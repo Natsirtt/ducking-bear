@@ -9,11 +9,13 @@ import edu.turtlekit2.warbot.message.WarMessage;
 public class ParticipantBehavior extends AbstractBehavior {	
 	private Behavior oldBehavior;
 	private Entity entity;
+	private int contratID;
 	
-	public ParticipantBehavior(Entity entity, Behavior oldBehavior) {
+	public ParticipantBehavior(Entity entity, Behavior oldBehavior, int contratID) {
 		super(entity, oldBehavior.getTeamNumber());
 		this.oldBehavior = oldBehavior;
 		this.entity = entity;
+		this.contratID = contratID;
 	}
 
 	@Override
@@ -27,6 +29,9 @@ public class ParticipantBehavior extends AbstractBehavior {
 	public void processMessage(WarMessage msg) {
 		oldBehavior.processMessage(msg);
 		if (msg.getMessage().equals("acceptParticipant")) {
+			if (Integer.parseInt(msg.getContent()[0]) != contratID) {
+				return;
+			}
 			String[] content = msg.getContent();
 			try {
 				Behavior b = (Behavior) Class.forName(content[1])
@@ -41,8 +46,14 @@ public class ParticipantBehavior extends AbstractBehavior {
 				e.printStackTrace();
 			}
 		} else if (msg.getMessage().equals("refuseParticipant")) {
+			if (Integer.parseInt(msg.getContent()[0]) != contratID) {
+				return;
+			}
 			entity.setBehavior(oldBehavior);
 		} else if (msg.getMessage().equals("newContrat")) {
+			if (Integer.parseInt(msg.getContent()[0]) != contratID) {
+				return;
+			}
 			entity.getBrain().reply(msg, "refuseContrat", msg.getContent());
 		}
 	}

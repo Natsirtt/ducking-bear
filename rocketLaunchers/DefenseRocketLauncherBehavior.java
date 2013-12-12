@@ -6,36 +6,41 @@ import edu.turtlekit2.warbot.duckingbear.Entity;
 import edu.turtlekit2.warbot.duckingbear.knowledge.EntityKnowledge;
 import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
+import edu.turtlekit2.warbot.duckingbear.utils.Point;
 import edu.turtlekit2.warbot.message.WarMessage;
 import edu.turtlekit2.warbot.waritems.WarRocket;
 
-public class FireTestRocketLauncherBehavior extends AbstractBehavior {			
-	public FireTestRocketLauncherBehavior(Entity entity, int teamNumber) {
+public class DefenseRocketLauncherBehavior extends AbstractBehavior {
+	private Point destination;
+	
+	public DefenseRocketLauncherBehavior(Entity entity, int teamNumber) {
 		super(entity, teamNumber);
+		destination = null;
 	}
 
 	@Override
 	public void processMessage(WarMessage msg) {
-
+		if (msg.getMessage().equals("goto")) {
+			String[] content = msg.getContent();
+			int x = Integer.parseInt(content[0]);
+			int y = Integer.parseInt(content[1]);
+			destination = new Point(x, y);
+		}
 	}
 
 	@Override
 	public String act() {
 		super.act();
+		
 		WarBrain ent = getEntity().getBrain();
 		KnowledgeBase kb = getEntity().getKnowledgeBase();
 		if (ent.isBlocked()) {
 			ent.setRandomHeading();
 		}
 		
-		System.out.println("Je suis le rocket launcher #" + 
-							getEntity().getBrain().getID() + " et je cherche quelqu'un à tuer en " +
-							kb.getX() + " " + kb.getY());
-		
 		if (ent.isReloaded()) {
 			EntityKnowledge nearest = kb.getNearestEnnemy();
 			if (nearest != null) {
-				System.out.println("Je suis #" + ent.getID() + " et j'attaque #" + nearest.getID());
 				int angle = getAngle(kb.getX(), nearest.getX(), kb.getY(), nearest.getY());
 				ent.setAngleTurret(angle);
 				if (nearest.getDistance(getKnowledgeBase().getX(), getKnowledgeBase().getY()) <= 23 * WarRocket.SPEED + 10) {//10 pour avoir une marge //TODO passer de 23 à WarRocket.AUTONOMY lorsque warbot sera corrigé
@@ -45,8 +50,17 @@ public class FireTestRocketLauncherBehavior extends AbstractBehavior {
 		} else if (!ent.isReloading()) {
 			return Names.RELOAD;
 		}
-		
-		return Names.MOVE;
+		if (destination != null) {
+			Point here = new Point(getKnowledgeBase().getX(), getKnowledgeBase().getY());
+			if (here.distance(destination) < 1) {
+				destination = null;
+				return Names.IDLE;
+			} else {
+				getEntity().getBrain().setHeading(here.heading(destination));
+			}
+			return Names.MOVE;
+		}
+		return Names.IDLE;
 	}
 	
 	public String getType() {

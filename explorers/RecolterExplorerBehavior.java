@@ -39,10 +39,6 @@ public class RecolterExplorerBehavior extends AbstractBehavior {
 	}
 	
 	private String goToBase() {
-		//TODO implémenter une EntityKnowledge.getHeading(myX, myY) ou
-		//TODO quelque chose du genre pour avoir le heading vers une
-		//TODO EntityKnowledge directement.
-		//getEntity().getKnowledgeBase().getMainBase()
 		KnowledgeBase kb = getEntity().getKnowledgeBase();
 		EntityKnowledge ke = kb.getMainBase();
 		int dst = kb.getDistance(ke.getID());

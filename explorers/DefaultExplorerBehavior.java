@@ -23,7 +23,7 @@ public class DefaultExplorerBehavior extends AbstractBehavior {
 		//TODO histoire d'être tous d'accord, mais surtout des constantes pour ne pas faire d'erreur
 		if (msg.getMessage().equals("newContrat")) {
 			getEntity().getBrain().reply(msg, "acceptContrat", msg.getContent());
-			getEntity().setBehavior(new ParticipantBehavior(getEntity(), this));
+			getEntity().setBehavior(new ParticipantBehavior(getEntity(), this, Integer.parseInt(msg.getContent()[0])));
 		}
 	}
 	
