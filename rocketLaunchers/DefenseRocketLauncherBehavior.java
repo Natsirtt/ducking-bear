@@ -3,6 +3,7 @@ package edu.turtlekit2.warbot.duckingbear.rocketLaunchers;
 import edu.turtlekit2.warbot.WarBrain;
 import edu.turtlekit2.warbot.duckingbear.AbstractBehavior;
 import edu.turtlekit2.warbot.duckingbear.Entity;
+import edu.turtlekit2.warbot.duckingbear.ParticipantBehavior;
 import edu.turtlekit2.warbot.duckingbear.knowledge.EntityKnowledge;
 import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
@@ -20,11 +21,20 @@ public class DefenseRocketLauncherBehavior extends AbstractBehavior {
 
 	@Override
 	public void processMessage(WarMessage msg) {
-		if (msg.getMessage().equals("goto")) {
-			String[] content = msg.getContent();
-			int x = Integer.parseInt(content[0]);
-			int y = Integer.parseInt(content[1]);
-			destination = new Point(x, y);
+		if (getEntity().getBehavior() == this) {
+			if (msg.getMessage().equals("goto")) {
+				String[] content = msg.getContent();
+				int x = Integer.parseInt(content[0]);
+				int y = Integer.parseInt(content[1]);
+				destination = new Point(x, y);
+			} else if (msg.getMessage().equals("newContrat")) {
+				System.out.println("Je suis un RocketLauncher et je reçoi un contrat de " + msg.getSender());
+				getEntity().getBrain().reply(msg, "acceptContrat", msg.getContent());
+				getEntity().setBehavior(new ParticipantBehavior(getEntity(), this, Integer.parseInt(msg.getContent()[0])));
+			}
+		} else if (msg.getMessage().equals("newContrat")) {
+			getEntity().getBrain().reply(msg, "refuseContrat", msg.getContent());
+			getEntity().setBehavior(new ParticipantBehavior(getEntity(), this, Integer.parseInt(msg.getContent()[0])));
 		}
 	}
 

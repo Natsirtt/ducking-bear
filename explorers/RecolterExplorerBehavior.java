@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.turtlekit2.warbot.duckingbear.AbstractBehavior;
 import edu.turtlekit2.warbot.duckingbear.Entity;
+import edu.turtlekit2.warbot.duckingbear.ParticipantBehavior;
 import edu.turtlekit2.warbot.duckingbear.knowledge.EntityKnowledge;
 import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
@@ -116,7 +117,10 @@ public class RecolterExplorerBehavior extends AbstractBehavior {
 
 	@Override
 	public void processMessage(WarMessage msg) {
-		// TODO Auto-generated method stub
+		if (msg.getMessage().equals("newContrat")) {
+			getEntity().getBrain().reply(msg, "acceptContrat", msg.getContent());
+			getEntity().setBehavior(new ParticipantBehavior(getEntity(), this, Integer.parseInt(msg.getContent()[0])));
+		}
 	}
 
 	@Override

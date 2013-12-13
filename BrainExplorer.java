@@ -34,4 +34,9 @@ public class BrainExplorer extends WarBrain implements Entity {
 	public WarBrain getBrain() {
 		return this;
 	}
+	
+	@Override
+	public Behavior getBehavior() {
+		return behavior;
+	}
 }

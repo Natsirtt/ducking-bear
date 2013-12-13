@@ -10,4 +10,5 @@ public interface Entity {
 	KnowledgeBase getKnowledgeBase();
 	void setBehavior(Behavior behavior);
 	WarBrain getBrain();
+	Behavior getBehavior();
 }

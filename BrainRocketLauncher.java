@@ -35,4 +35,8 @@ public class BrainRocketLauncher extends WarBrain implements Entity {
 		return this;
 	}
 
+	@Override
+	public Behavior getBehavior() {
+		return behavior;
+	}
 }

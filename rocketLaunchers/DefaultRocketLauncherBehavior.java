@@ -15,12 +15,14 @@ public class DefaultRocketLauncherBehavior extends AbstractBehavior {
 
 	@Override
 	public void processMessage(WarMessage msg) {
-		//TODO les variables type "newContrat", "acceptContrat" etc... font partie
-		//TODO du protocole des contrats. Il nous faudrait 1/une rapide spécification
-		//TODO histoire d'être tous d'accord, mais surtout des constantes pour ne pas faire d'erreur
-		if (msg.getMessage().equals("newContrat")) {
-			getEntity().getBrain().reply(msg, "acceptContrat", msg.getContent());
-			getEntity().setBehavior(new ParticipantBehavior(getEntity(), this, Integer.parseInt(msg.getContent()[0])));
+		if (getEntity().getBehavior() == this) {
+			//TODO les variables type "newContrat", "acceptContrat" etc... font partie
+			//TODO du protocole des contrats. Il nous faudrait 1/une rapide spécification
+			//TODO histoire d'être tous d'accord, mais surtout des constantes pour ne pas faire d'erreur
+			if (msg.getMessage().equals("newContrat")) {
+				getEntity().getBrain().reply(msg, "acceptContrat", msg.getContent());
+				getEntity().setBehavior(new ParticipantBehavior(getEntity(), this, Integer.parseInt(msg.getContent()[0])));
+			}
 		}
 	}
 
