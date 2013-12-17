@@ -16,11 +16,13 @@ public class EntityKnowledge {
 	private int teamNumber;
 	// Le tick de dernière mise à jour
 	private long tick;
+	private int energy;
 	
 	public EntityKnowledge(FakeMessage msg, long tick) {
 		if (msg == null) {
 			throw new IllegalArgumentException();
 		}
+		this.energy = -1;
 		this.tick = tick;
 		String[] content = msg.getContent();
 		if (msg.getMessage().equals("alive")) {
@@ -30,6 +32,7 @@ public class EntityKnowledge {
 			x = Integer.parseInt(content[0]);
 			y = Integer.parseInt(content[1]);
 			teamNumber = Integer.parseInt(content[2]);
+			energy = Integer.parseInt(content[3]);
 		} else if (msg.getMessage().equals("ennemy")) {
 			id = Integer.parseInt(content[0]);
 			team = content[1];
@@ -52,6 +55,7 @@ public class EntityKnowledge {
 			x = Integer.parseInt(content[0]);
 			y = Integer.parseInt(content[1]);
 			teamNumber = Integer.parseInt(content[2]);
+			energy = Integer.parseInt(content[3]);
 		} else if (msg.getMessage() == "ennemy") {
 			id = Integer.parseInt(content[0]);
 			team = content[1];
@@ -80,6 +84,11 @@ public class EntityKnowledge {
 	public String getType() {
 		return type;
 	}
+	
+	public int getEnergy() {
+		return energy;
+	}
+	
 	/**
 	 * Renvoie la position x de l'entité.
 	 * Note : la position est relative à la base principale.

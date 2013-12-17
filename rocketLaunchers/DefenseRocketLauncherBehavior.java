@@ -40,7 +40,10 @@ public class DefenseRocketLauncherBehavior extends AbstractBehavior {
 
 	@Override
 	public String act() {
-		super.act();
+		String reflex = super.act();
+		if (reflex != null) {
+			return reflex;
+		}
 		
 		WarBrain ent = getEntity().getBrain();
 		KnowledgeBase kb = getEntity().getKnowledgeBase();

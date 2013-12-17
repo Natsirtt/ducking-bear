@@ -1,7 +1,5 @@
 package edu.turtlekit2.warbot.duckingbear;
 
-import org.omg.CORBA.TIMEOUT;
-
 import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
 import edu.turtlekit2.warbot.message.WarMessage;

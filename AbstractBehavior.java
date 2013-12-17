@@ -62,6 +62,13 @@ public abstract class AbstractBehavior implements Behavior {
 			}
 		}
 		signalAlive();
+		return processReflexes();
+	}
+	
+	protected String processReflexes() {
+		if (!getEntity().getBrain().emptyBag()) {
+			return Names.EAT;
+		}
 		return null;
 	}
 	
@@ -84,7 +91,8 @@ public abstract class AbstractBehavior implements Behavior {
 		String[] content = new String[] {
 				String.valueOf(kb.getX()), 
 				String.valueOf(kb.getY()), 
-				String.valueOf(getTeamNumber())};
+				String.valueOf(getTeamNumber()),
+				String.valueOf(entity.getBrain().getEnergy())};
 		broadcastMessage("all", "alive", content);
 	}
 

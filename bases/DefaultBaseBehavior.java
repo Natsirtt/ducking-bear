@@ -65,7 +65,7 @@ public class DefaultBaseBehavior extends AbstractBehavior {
 					explorerTeam = explorerContrat.getContratID();
 				}
 			} else {
-				String cmp = "edu.turtlekit2.warbot.duckingbear.explorers.RecolterExplorerBehavior";
+				String cmp = "edu.turtlekit2.warbot.duckingbear.explorers.HealerExplorerBehavior";
 				explorerContrat = new ManagerBehavior(getEntity(), this, Names.EXPLORER, 5, cmp);	
 			}
 		}

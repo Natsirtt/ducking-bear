@@ -36,7 +36,7 @@ public class RecolterExplorerBehavior extends AbstractBehavior {
 	public RecolterExplorerBehavior(Entity entity, int teamNumber) {
 		super(entity, teamNumber);
 		//Default task
-		pTask = Task.SEARCH_FOOD;
+		pTask = defaultTask;
 	}
 	
 	private String goToBase() {
@@ -76,7 +76,7 @@ public class RecolterExplorerBehavior extends AbstractBehavior {
 					}
 				}
 				
-				//Si on a trouver du miam miam, on se dirige vers lui
+				//Si on a trouvé du miam miam, on se dirige vers lui
 				if (food != null) {
 					getEntity().getBrain().setHeading(food.getAngle());
 				}

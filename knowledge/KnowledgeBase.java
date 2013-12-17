@@ -154,6 +154,15 @@ public class KnowledgeBase {
 		}
 		return count;
 	}
+	
+	public List<EntityKnowledge> getAllies() {
+		List<EntityKnowledge> res = new LinkedList<>();
+		for (SortedMap<Integer, EntityKnowledge> map : allies.values()) {
+			res.addAll(map.values());
+		}
+		return res;
+	}
+	
 	/**
 	 * Renvoie le nombre d'explorer dans l'équipe.
 	 * @return
