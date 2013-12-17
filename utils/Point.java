@@ -30,8 +30,7 @@ public class Point {
 	 */
 	public double heading(Point p) {
 		double radian = Math.atan2((p.y - y), (p.x - x));
-		double angle = Math.toDegrees(radian);
-		return angle;
+		return Math.toDegrees(radian);
 	}
 	
 	public String toString() {
