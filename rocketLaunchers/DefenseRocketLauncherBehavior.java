@@ -9,7 +9,6 @@ import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
 import edu.turtlekit2.warbot.duckingbear.utils.Point;
 import edu.turtlekit2.warbot.message.WarMessage;
-import edu.turtlekit2.warbot.waritems.WarRocket;
 
 public class DefenseRocketLauncherBehavior extends AbstractBehavior {
 	private Point destination;
@@ -52,13 +51,11 @@ public class DefenseRocketLauncherBehavior extends AbstractBehavior {
 		}
 		
 		if (ent.isReloaded()) {
-			EntityKnowledge nearest = kb.getNearestEnnemy();
+			EntityKnowledge nearest = kb.getBestTarget();
 			if (nearest != null) {
-				int angle = getAngle(kb.getX(), nearest.getX(), kb.getY(), nearest.getY());
-				ent.setAngleTurret(angle);
-				if (nearest.getDistance(getKnowledgeBase().getX(), getKnowledgeBase().getY()) <= 23 * WarRocket.SPEED + 10) {//10 pour avoir une marge //TODO passer de 23 à WarRocket.AUTONOMY lorsque warbot sera corrigé
-					return Names.FIRE;
-				}
+				double angle = kb.getBestShootAngle(nearest);
+				ent.setAngleTurret((int) angle);
+				return Names.FIRE;
 			}
 		} else if (!ent.isReloading()) {
 			return Names.RELOAD;
@@ -78,15 +75,5 @@ public class DefenseRocketLauncherBehavior extends AbstractBehavior {
 	
 	public String getType() {
 		return Names.ROCKET_LAUNCHER;
-	}
-	
-	private int getAngle(double x1, double x2, double y1, double y2){
-		int angle = 0;
-        
-		double radian = Math.atan2((y2 - y1), (x2 - x1));
-
-        angle = (int) Math.toDegrees(radian);
-        
-        return angle;
 	}
 }

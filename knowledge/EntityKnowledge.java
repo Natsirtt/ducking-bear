@@ -17,6 +17,7 @@ public class EntityKnowledge {
 	// Le tick de dernière mise à jour
 	private long tick;
 	private int energy;
+	private double heading;
 	
 	public EntityKnowledge(FakeMessage msg, long tick) {
 		if (msg == null) {
@@ -33,12 +34,15 @@ public class EntityKnowledge {
 			y = Integer.parseInt(content[1]);
 			teamNumber = Integer.parseInt(content[2]);
 			energy = Integer.parseInt(content[3]);
+			heading = Double.parseDouble(content[4]);
 		} else if (msg.getMessage().equals("ennemy")) {
 			id = Integer.parseInt(content[0]);
 			team = content[1];
 			type = content[2];
 			x = Integer.parseInt(content[3]);
 			y = Integer.parseInt(content[4]);
+			energy = Integer.parseInt(content[5]);
+			heading = Double.parseDouble(content[6]);
 			teamNumber = 0;
 		} else {
 			throw new IllegalArgumentException();
@@ -56,12 +60,14 @@ public class EntityKnowledge {
 			y = Integer.parseInt(content[1]);
 			teamNumber = Integer.parseInt(content[2]);
 			energy = Integer.parseInt(content[3]);
+			heading = Double.parseDouble(content[4]);
 		} else if (msg.getMessage() == "ennemy") {
 			id = Integer.parseInt(content[0]);
 			team = content[1];
 			type = content[2];
 			x = Integer.parseInt(content[3]);
 			y = Integer.parseInt(content[4]);
+			heading = Double.parseDouble(content[5]);
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -119,5 +125,9 @@ public class EntityKnowledge {
 	
 	public int getTeamNumber() {
 		return teamNumber;
+	}
+	
+	public double getHeading() {
+		return heading;
 	}
 }

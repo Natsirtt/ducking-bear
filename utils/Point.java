@@ -28,9 +28,9 @@ public class Point {
 	/**
 	 * Renvoie la direction de 'this' vers 'p'
 	 */
-	public int heading(Point p) {
+	public double heading(Point p) {
 		double radian = Math.atan2((p.y - y), (p.x - x));
-		int angle = (int) Math.toDegrees(radian);
+		double angle = Math.toDegrees(radian);
 		return angle;
 	}
 	

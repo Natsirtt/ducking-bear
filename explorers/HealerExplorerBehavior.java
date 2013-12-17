@@ -10,14 +10,15 @@ import edu.turtlekit2.warbot.duckingbear.knowledge.EntityKnowledge;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
 import edu.turtlekit2.warbot.message.WarMessage;
 import edu.turtlekit2.warbot.percepts.Percept;
+import edu.turtlekit2.warbot.waritems.WarFood;
 
 /**
- * Soigne l'entitée la plus faible.
+ * Soigne l'entitï¿½e la plus faible.
  */
 public class HealerExplorerBehavior extends AbstractBehavior {
 	
 	/**
-	 * La tâche du FSM en cours d'execution.
+	 * La tï¿½che du FSM en cours d'execution.
 	 */
 	private Task pTask;
 	private EntityKnowledge target;
@@ -89,14 +90,14 @@ public class HealerExplorerBehavior extends AbstractBehavior {
 	}
 	
 	private String searchFood() {
-		//Avant toute chose, si le sac est plein et que personne n'a demandé
-		//d'aide, on va se poster près de la base
+		//Avant toute chose, si le sac est plein et que personne n'a demandï¿½
+		//d'aide, on va se poster prï¿½s de la base
 		if (getEntity().getBrain().fullBag()) {
 			pTask = Task.GO_HEAL_TARGET;
 			return runFSM(pTask);
 		}
 		
-		//On récupère les percepts
+		//On rï¿½cupï¿½re les percepts
 		List<Percept> percepts = getEntity().getBrain().getPercepts();
 		Percept food = null;
 		for (Percept p : percepts) {
@@ -112,7 +113,7 @@ public class HealerExplorerBehavior extends AbstractBehavior {
 			}
 		}
 		
-		//Si on a trouvé du miam miam, on se dirige vers lui
+		//Si on a trouvï¿½ du miam miam, on se dirige vers lui
 		if (food != null) {
 			getEntity().getBrain().setHeading(food.getAngle());
 		}
@@ -120,12 +121,12 @@ public class HealerExplorerBehavior extends AbstractBehavior {
 		else if (Math.random() <= (0.1 / 100)) {
 			getEntity().getBrain().setRandomHeading();
 		}
-		//si on est bloqué on fait demi tour
+		//si on est bloquï¿½ on fait demi tour
 		if (getEntity().getBrain().isBlocked()) {
 			getEntity().getBrain().setHeading(getEntity().getBrain().getHeading() - 180);
 		}
 		
-		if ((food != null) && (food.getDistance() <= 1)) { //TODO <= 1 pour ne pas qu'un bot ne bug a tourner autour d'une food. Valeur empirique.
+		if ((food != null) && (food.getDistance() <= WarFood.MAX_DISTANCE_TAKE)) {
 			return Names.TAKE;
 		}
 		

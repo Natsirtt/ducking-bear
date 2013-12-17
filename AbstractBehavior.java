@@ -82,7 +82,10 @@ public abstract class AbstractBehavior implements Behavior {
 				percept.getTeam(),
 				percept.getType(),
 				String.valueOf(x), 
-				String.valueOf(y)};
+				String.valueOf(y),
+				String.valueOf(percept.getEnergy()),
+				String.valueOf(percept.getHeading())
+		};
 		broadcastMessage("all", "ennemy", content);
 	}
 	
@@ -92,7 +95,9 @@ public abstract class AbstractBehavior implements Behavior {
 				String.valueOf(kb.getX()), 
 				String.valueOf(kb.getY()), 
 				String.valueOf(getTeamNumber()),
-				String.valueOf(entity.getBrain().getEnergy())};
+				String.valueOf(entity.getBrain().getEnergy()),
+				String.valueOf((double)entity.getBrain().getHeading())
+		};
 		broadcastMessage("all", "alive", content);
 	}
 

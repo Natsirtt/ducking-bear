@@ -7,8 +7,12 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import edu.turtlekit2.warbot.agents.WarExplorer;
+import edu.turtlekit2.warbot.agents.WarRocketLauncher;
 import edu.turtlekit2.warbot.duckingbear.FakeMessage;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
+import edu.turtlekit2.warbot.duckingbear.utils.Point;
+import edu.turtlekit2.warbot.waritems.WarRocket;
 
 /**
  * Classe représentant la base de connaisance d'une entité
@@ -92,9 +96,6 @@ public class KnowledgeBase {
 				ent.update(msg, getTick());
 			}
 		} else if (msg.getMessage().equals("beginContract")) {
-			if (type == Names.BASE) {
-				System.out.println("Reception beginContract");
-			}
 			String[] content = msg.getContent();
 			setActiveContract(content[0], Integer.parseInt(content[1]));
 		} else if (msg.getMessage().equals("endContract")) {
@@ -291,6 +292,42 @@ public class KnowledgeBase {
 		} else if ((activeContract == -1) || (activeContract > id)) {
 			activeContracts.put(type, id);
 		}
+	}
+	
+	public EntityKnowledge getBestTarget() {
+		int radius = (int) (WarRocket.AUTONOMY * WarRocket.SPEED);
+		EntityKnowledge target = null;
+		
+		for (Map<Integer, EntityKnowledge> map : ennemies.values()) {
+			for (EntityKnowledge ek : map.values()) {
+				if ((ek.getLastUpdateDuration(tick) < 5) && (ek.getDistance(x, y) < radius)) {
+					if ((target == null) || (ek.getEnergy() < target.getEnergy())) {
+						target = ek;
+					}
+				}
+			}
+		}
+		return target;
+	}
+	
+	public double getBestShootAngle(EntityKnowledge target) {
+		double nbTick = 10; // Le nombre de tick d'avance que l'on calcule
+		
+		double speed = 0.0;
+		if (target.getType().equals(Names.EXPLORER)) {
+			speed = WarExplorer.SPEED;
+		} else if (target.getType().equals(Names.ROCKET_LAUNCHER)) {
+			speed = WarRocketLauncher.SPEED;
+		}
+		
+		int dx = (int) (Math.cos(Math.toRadians(target.getHeading())) * speed * nbTick);
+		int dy = (int) (Math.sin(Math.toRadians(target.getHeading())) * speed * nbTick);
+		
+		Point p = new Point(target.getX() + dx, target.getY() + dy);
+		Point here = new Point(x, y);
+		
+		
+		return here.heading(p);
 	}
 	
 	public String toString() {
