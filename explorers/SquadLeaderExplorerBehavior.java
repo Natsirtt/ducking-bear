@@ -32,7 +32,7 @@ public class SquadLeaderExplorerBehavior extends AbstractBehavior {
 	public String act() {
 		super.act();
 		
-		System.out.println("#" + getEntity().getBrain().getID() + " Je suis un leader !");
+		System.out.println("#" + getEntity().getBrain().getID() + " Je suis un leader ! Mon equipe #" + myteam);
 		
 		if (myteam == -1) {
 			if (membersContrat == null) {
@@ -50,8 +50,13 @@ public class SquadLeaderExplorerBehavior extends AbstractBehavior {
 		} else {
 			String[] content = new String[] {
 				String.valueOf(myteam),
-				String.valueOf(getTeamNumber())
+				String.valueOf(getEntity().getBrain().getID())
 			};
+			String s = "";
+			for (int i = 0; i < content.length; i++) {
+				s += " " + content[i];
+			}
+			System.out.println("# " + getEntity().getBrain().getID() + " j'envoie un message a mes membres : " + s);
 			broadcastMessage("all", "leader", content);
 		}
 		if (getEntity().getBrain().isBlocked()) {

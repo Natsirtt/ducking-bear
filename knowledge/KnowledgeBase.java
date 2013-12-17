@@ -18,6 +18,8 @@ public class KnowledgeBase {
 	private Map<String, SortedMap<Integer, EntityKnowledge>> ennemies;
 	private Map<String, SortedMap<Integer, EntityKnowledge>> allies;
 	
+	private Map<String, Integer> activeContracts;
+	
 	int id;
 	String type;
 	
@@ -26,6 +28,10 @@ public class KnowledgeBase {
 	
 	private long tick;
 	
+	/**
+	 * 
+	 * @param type Le type de l'unité possédant cette base de connaissances.
+	 */
 	public KnowledgeBase(String type) {
 		ennemies = new HashMap<>();
 		allies = new HashMap<>();
@@ -34,6 +40,7 @@ public class KnowledgeBase {
 		y = 0;
 		this.id = 0;
 		this.type = type;
+		activeContracts = new HashMap<>();
 	}
 	
 	public void setID(int id) {
@@ -84,6 +91,15 @@ public class KnowledgeBase {
 			} else {
 				ent.update(msg, getTick());
 			}
+		} else if (msg.getMessage().equals("beginContract")) {
+			if (type == Names.BASE) {
+				System.out.println("Reception beginContract");
+			}
+			String[] content = msg.getContent();
+			setActiveContract(content[0], Integer.parseInt(content[1]));
+		} else if (msg.getMessage().equals("endContract")) {
+			String[] content = msg.getContent();
+			setActiveContract(content[0], -1);
 		}
 	}
 	
@@ -240,6 +256,32 @@ public class KnowledgeBase {
 			}
 		}
 		return lek;
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	/**
+	 * Renvoie l'ID du contrat actif pour un certain type d'unités.
+	 * @param type Le type d'unité du contrat.
+	 * @return -1 si aucun contrat n'est actif.
+	 */
+	public int getActiveContrat(String type) {
+		Integer id = activeContracts.get(type);
+		if (id == null) {
+			return -1;
+		}
+		return id;
+	}
+	
+	private void setActiveContract(String type, int id) {
+		int activeContract = getActiveContrat(type);
+		if (id == -1) {
+			activeContracts.put(type, null);
+		} else if ((activeContract == -1) || (activeContract > id)) {
+			activeContracts.put(type, id);
+		}
 	}
 	
 	public String toString() {

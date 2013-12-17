@@ -17,19 +17,18 @@ public class SquadMemberRocketLauncherBehavior extends AbstractBehavior {
 
 	@Override
 	public void processMessage(WarMessage msg) {
-		if (getEntity().getBehavior() == this) {
-			if (msg.getMessage().equals("leader")) {
-				String[] content = msg.getContent();
-				if (Integer.parseInt(content[0]) == getTeamNumber()) {
-					leader = Integer.parseInt(content[1]);
-				}
+		if (msg.getMessage().equals("leader")) {
+			String[] content = msg.getContent();
+			if (Integer.parseInt(content[0]) == getTeamNumber()) {
+				leader = Integer.parseInt(content[1]);
 			}
 		}
 	}
 	
 	public String act() {
+		super.act();
 		System.out.println("#" + getEntity().getBrain().getID() + " Je suis un SquadMember ! "
-				+ "Mon Equipe : " + getTeamNumber() + " Mon leader : " + leader);
+				+ " Mon Equipe : " + getTeamNumber() + " Mon leader : " + leader);
 		if (leader != -1) {
 			KnowledgeBase kb = getKnowledgeBase();
 			int heading = kb.getHeading(leader);

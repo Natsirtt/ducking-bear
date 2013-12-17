@@ -33,7 +33,12 @@ public abstract class AbstractBehavior implements Behavior {
 		List<WarMessage> messages = entity.getBrain().getMessage();
 		for (WarMessage msg : messages) {
 			kb.processMessage(new FakeMessage(msg));
-			processMessage(msg);
+			/*
+			 * On utilise "getEntity().getBehavior()" plutot que "this"
+			 *   au cas ou le comportement aurait change durant 
+			 *   le traitement des messages.
+			 */
+			getEntity().getBehavior().processMessage(msg);
 		}
 		for (FakeMessage msg : this.messages) {
 			kb.processMessage(msg);
@@ -44,6 +49,11 @@ public abstract class AbstractBehavior implements Behavior {
 	@Override
 	public String act() {
 		processMessages();
+		// Au cas ou le comportement aurait change durant le traitement des messages
+		if (getEntity().getBehavior() != this) {
+			return getEntity().getBehavior().act();
+		}
+			
 		List<Percept> percepts = entity.getBrain().getPercepts();
 		for (Percept percept : percepts) {
 			if (!percept.getTeam().equals(entity.getBrain().getTeam()) && 

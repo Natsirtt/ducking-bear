@@ -18,4 +18,6 @@ public interface Behavior {
 	String getType();
 	
 	int getTeamNumber();
+	
+	void broadcastMessage(String target, String msg, String[] content);
 }
