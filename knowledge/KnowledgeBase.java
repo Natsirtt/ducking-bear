@@ -332,7 +332,7 @@ public class KnowledgeBase {
 	}
 	
 	public double getBestShootAngle(EntityKnowledge target) {
-		double nbTick = 6.0; // Le nombre de tick d'avance que l'on calcule
+		/*double nbTick = 6.0; // Le nombre de tick d'avance que l'on calcule
 		
 		double speed = 0.0;
 		if (target.getType().equals(Names.EXPLORER)) {
@@ -343,7 +343,10 @@ public class KnowledgeBase {
 		
 		int dx = (int) (Math.cos(Math.toRadians(target.getHeading())) * speed * nbTick);
 		int dy = (int) (Math.sin(Math.toRadians(target.getHeading())) * speed * nbTick);
-		System.out.println(dx + " " + dy + " " + speed);
+		System.out.println(dx + " " + dy + " " + speed);*/
+		
+		int dx = 0;
+		int dy = 0;
 		
 		Point p = new Point(target.getX() + dx, target.getY() + dy);
 		Point here = new Point(x, y);
