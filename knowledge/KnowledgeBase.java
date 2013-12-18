@@ -39,6 +39,7 @@ public class KnowledgeBase {
 	public KnowledgeBase(String type) {
 		ennemies = new HashMap<>();
 		allies = new HashMap<>();
+		
 		tick = 0;
 		x = 0;
 		y = 0;
@@ -61,6 +62,11 @@ public class KnowledgeBase {
 	public long getTick() {
 		return tick;
 	}
+	
+	public boolean isInformationReliable(EntityKnowledge e) {
+		return !(e.getTick() + 4 < tick);
+	}
+	
 	public void processMessage(FakeMessage msg) {
 		if (msg.getMessage().equals("alive")) {
 			SortedMap<Integer, EntityKnowledge> a = allies.get(msg.getSenderType());
@@ -127,6 +133,21 @@ public class KnowledgeBase {
 			}
 		}
 		return nearest;
+	}
+	
+	public EntityKnowledge getNearestEnnemyBase() {
+		EntityKnowledge res = null;
+		
+		SortedMap<Integer, EntityKnowledge> map = ennemies.get(Names.BASE);
+		if (map != null) {
+			for (EntityKnowledge entity : map.values()) {
+				if ((res == null) || (getDistance(res.getID()) > getDistance(entity.getID()))) {
+					res = entity;
+				}
+			}
+		}
+		
+		return res;
 	}
 	
 	public EntityKnowledge getMainBase() {

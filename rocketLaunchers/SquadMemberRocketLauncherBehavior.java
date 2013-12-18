@@ -26,7 +26,10 @@ public class SquadMemberRocketLauncherBehavior extends AbstractBehavior {
 	}
 	
 	public String act() {
-		super.act();
+		String reflex = super.act();
+		if (reflex != null) {
+			return reflex;
+		}
 		System.out.println("#" + getEntity().getBrain().getID() + " Je suis un SquadMember ! "
 				+ " Mon Equipe : " + getTeamNumber() + " Mon leader : " + leader);
 		if (leader != -1) {

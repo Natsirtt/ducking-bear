@@ -57,7 +57,7 @@ public class DefaultBaseBehavior extends AbstractBehavior {
 
 	@Override
 	public String act() {
-		super.act();
+		String reflex = super.act();
 		if (explorerTeam == -1) {
 			if (explorerContrat != null) {
 				explorerContrat.act();
@@ -65,8 +65,8 @@ public class DefaultBaseBehavior extends AbstractBehavior {
 					explorerTeam = explorerContrat.getContratID();
 				}
 			} else {
-				String cmp = "edu.turtlekit2.warbot.duckingbear.explorers.HealerExplorerBehavior";
-				explorerContrat = new ManagerBehavior(getEntity(), this, Names.EXPLORER, 5, cmp);	
+				String cmp = "edu.turtlekit2.warbot.duckingbear.explorers.RecolterExplorerBehavior";
+				explorerContrat = new ManagerBehavior(getEntity(), this, Names.EXPLORER, 8, cmp);	
 			}
 		}
 		if (rocketlauncherTeam == -1) {
@@ -113,8 +113,6 @@ public class DefaultBaseBehavior extends AbstractBehavior {
 					phase2 = true;
 				}
 			}
-		} else if (canEat()) {
-			return Names.EAT;
 		}
 		
 		if (phase2 && !phase2Sent) {
@@ -126,6 +124,9 @@ public class DefaultBaseBehavior extends AbstractBehavior {
 			squadContrat.act();
 		}
 
+		if (reflex != null) {
+			return reflex;
+		}
 		return Names.IDLE;
 	}
 
@@ -139,10 +140,6 @@ public class DefaultBaseBehavior extends AbstractBehavior {
 	}
 	
 	private boolean canProduce() {
-		return getEntity().getBrain().getEnergy() > (WarBase.MAX_ENERGY - 200);
-	}
-	
-	private boolean canEat() {
-		return !getEntity().getBrain().emptyBag();
+		return getEntity().getBrain().getEnergy() > (WarBase.MAX_ENERGY + 200);
 	}
 }

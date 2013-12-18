@@ -72,11 +72,16 @@ public class EntityKnowledge {
 			throw new IllegalArgumentException();
 		}
 	}
+	
 	public String toString() {
 		String s = "";
 		s += type + "#" + id + " ";
 		s += "x : " + getX() + ", y : " + getY() + "";
 		return s;
+	}
+	
+	public long getTick() {
+		return tick;
 	}
 	
 	public int getID() {

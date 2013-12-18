@@ -2,6 +2,8 @@ package edu.turtlekit2.warbot.duckingbear.explorers;
 
 import java.util.List;
 
+import edu.turtlekit2.warbot.agents.WarExplorer;
+import edu.turtlekit2.warbot.agents.WarRocketLauncher;
 import edu.turtlekit2.warbot.duckingbear.AbstractBehavior;
 import edu.turtlekit2.warbot.duckingbear.Entity;
 import edu.turtlekit2.warbot.duckingbear.ParticipantBehavior;
@@ -10,6 +12,7 @@ import edu.turtlekit2.warbot.duckingbear.knowledge.KnowledgeBase;
 import edu.turtlekit2.warbot.duckingbear.utils.Names;
 import edu.turtlekit2.warbot.message.WarMessage;
 import edu.turtlekit2.warbot.percepts.Percept;
+import edu.turtlekit2.warbot.waritems.WarFood;
 
 /**
  * Un simple récolteur qui cherche de la nourriture et retourne a la base
@@ -24,6 +27,8 @@ public class RecolterExplorerBehavior extends AbstractBehavior {
 	 */
 	private Task pTask;
 	private static final Task defaultTask = Task.SEARCH_FOOD;
+	private int distanceToGo;
+	private boolean isGoingFarFarAway;
 	
 	private enum Task {
 		SEARCH_FOOD(), GO_TO_BASE();
@@ -37,15 +42,25 @@ public class RecolterExplorerBehavior extends AbstractBehavior {
 		super(entity, teamNumber);
 		//Default task
 		pTask = defaultTask;
+		isGoingFarFarAway = false;
+		distanceToGo = 0;
 	}
 	
 	private String goToBase() {
+		if (getEntity().getBrain().getEnergy() < WarExplorer.MAX_ENERGY) {
+			pTask = Task.SEARCH_FOOD;
+			return Names.EAT;
+		}
+		
 		KnowledgeBase kb = getEntity().getKnowledgeBase();
 		EntityKnowledge ke = kb.getMainBase();
 		int dst = kb.getDistance(ke.getID());
-		if (dst <= 1) {
-			pTask = Task.SEARCH_FOOD;
+		if (dst < WarFood.MAX_DISTANCE_TAKE) {
 			getEntity().getBrain().setAgentToGive(ke.getID());
+			if (getEntity().getBrain().emptyBag()) {
+				pTask = Task.SEARCH_FOOD;
+				return Names.IDLE;
+			}
 			return Names.GIVE;
 		} else {
 			int heading = kb.getHeading(ke.getID());
@@ -87,13 +102,19 @@ public class RecolterExplorerBehavior extends AbstractBehavior {
 				//si on est bloqué on fait demi tour
 				if (getEntity().getBrain().isBlocked()) {
 					getEntity().getBrain().setHeading(getEntity().getBrain().getHeading() - 180);
+					goFarFarAway(60);
 				}
 				
-				if ((food != null) && (food.getDistance() <= 1)) { //TODO <= 1 pour ne pas qu'un bot ne bug a tourner autour d'une food. Valeur empirique.
+				if ((food != null) && (food.getDistance() <= WarFood.MAX_DISTANCE_TAKE)) {
 					return Names.TAKE;
 				}
 				
 				return Names.MOVE;
+	}
+	
+	private void goFarFarAway(int ticksToMoveForward) {
+		distanceToGo = ticksToMoveForward;
+		isGoingFarFarAway = true;
 	}
 	
 	private String runFSM(Task state) {
@@ -108,8 +129,35 @@ public class RecolterExplorerBehavior extends AbstractBehavior {
 	}
 	
 	@Override
+	protected String processReflexes() {
+		String old = super.processReflexes();
+		if (old != null && !old.equals(Names.EAT)) {
+			return old;
+		}
+		if (isGoingFarFarAway) {
+			distanceToGo--;
+			if (distanceToGo <= 0) {
+				isGoingFarFarAway = false;
+			}
+			return Names.MOVE;
+		}
+		//On reste a distance raisonnable d'un tank ennemi
+		EntityKnowledge nearestEnnemy = getKnowledgeBase().getNearestEnnemy();
+		if (nearestEnnemy != null && nearestEnnemy.getType().equals(Names.ROCKET_LAUNCHER)) {
+			if (getKnowledgeBase().getDistance(nearestEnnemy.getID()) <= WarRocketLauncher.RADIUS + 8) {
+				getEntity().getBrain().setHeading(getKnowledgeBase().getHeading(nearestEnnemy.getID()) + 180);
+				return Names.MOVE;
+			}
+		}
+		return null;
+	}
+	
+	@Override
 	public String act() {
-		super.act();
+		String reflex = super.act();
+		if (reflex != null) {
+			return reflex;
+		}
 		//Un récolteur va chercher de la nourriture jusqu'à être plein
 		//il va alors ramener la nourriture à la base
 		return runFSM(pTask);

@@ -3,6 +3,7 @@ package edu.turtlekit2.warbot.duckingbear.explorers;
 import java.util.List;
 
 import edu.turtlekit2.warbot.agents.WarExplorer;
+import edu.turtlekit2.warbot.agents.WarRocketLauncher;
 import edu.turtlekit2.warbot.duckingbear.AbstractBehavior;
 import edu.turtlekit2.warbot.duckingbear.Entity;
 import edu.turtlekit2.warbot.duckingbear.ParticipantBehavior;
@@ -22,8 +23,10 @@ public class HealerExplorerBehavior extends AbstractBehavior {
 	 */
 	private Task pTask;
 	private EntityKnowledge target;
+	private int distanceToGo;
+	private boolean isGoingFarFarAway;
 	
-	private static final Task defaultTask = Task.SEARCH_FOOD;
+	private static final Task DEFAULT_TASK = Task.SEARCH_FOOD;
 	
 	private enum Task {
 		SEARCH_FOOD(), GO_HEAL_TARGET();
@@ -36,8 +39,10 @@ public class HealerExplorerBehavior extends AbstractBehavior {
 	public HealerExplorerBehavior(Entity entity, int teamNumber) {
 		super(entity, teamNumber);
 		//Default task
-		pTask = defaultTask;
+		pTask = DEFAULT_TASK;
 		target = null;
+		isGoingFarFarAway = false;
+		distanceToGo = 0;
 	}
 	
 	private String runFSM(Task state) {
@@ -47,22 +52,27 @@ public class HealerExplorerBehavior extends AbstractBehavior {
 		case GO_HEAL_TARGET:
 			return goHealTarget();
 		default:
-			return runFSM(defaultTask);
+			return runFSM(DEFAULT_TASK);
 		}
 	}
 
 	@Override
 	public String act() {
-		super.act();
+		String reflex = super.act();
+		if (reflex != null) {
+			return reflex;
+		}
 		return runFSM(pTask);
 	}
 	
 	private EntityKnowledge getWeakestAllyRocketLauncher() {
 		EntityKnowledge res = null;
 		for (EntityKnowledge ek : getKnowledgeBase().getAllies()) {
-			if (res == null || res.getEnergy() > ek.getEnergy()) {
-				if (ek.getType().equals(Names.ROCKET_LAUNCHER)) {
-					res = ek;
+			if (res == null || (res.getEnergy() > ek.getEnergy()) && ek.getEnergy() > 0) {
+				if (getKnowledgeBase().isInformationReliable(ek)) {
+					if (ek.getType().equals(Names.ROCKET_LAUNCHER)) {
+						res = ek;
+					}
 				}
 			}
 		}
@@ -81,9 +91,12 @@ public class HealerExplorerBehavior extends AbstractBehavior {
 		}
 		getEntity().getBrain().setHeading(getKnowledgeBase().getHeading(target.getID()));
 		if (getKnowledgeBase().getDistance(target.getID()) <= 1) {
-			pTask = Task.SEARCH_FOOD;
 			getEntity().getBrain().setAgentToGive(target.getID());
-			target = null;
+			if (getEntity().getBrain().emptyBag()) {
+				target = null;
+				pTask = Task.SEARCH_FOOD;
+				return Names.IDLE;
+			}
 			return Names.GIVE;
 		}
 		return Names.MOVE;
@@ -124,6 +137,7 @@ public class HealerExplorerBehavior extends AbstractBehavior {
 		//si on est bloqu� on fait demi tour
 		if (getEntity().getBrain().isBlocked()) {
 			getEntity().getBrain().setHeading(getEntity().getBrain().getHeading() - 180);
+			goFarFarAway(60);
 		}
 		
 		if ((food != null) && (food.getDistance() <= WarFood.MAX_DISTANCE_TAKE)) {
@@ -131,6 +145,35 @@ public class HealerExplorerBehavior extends AbstractBehavior {
 		}
 		
 		return Names.MOVE;
+	}
+	
+	private void goFarFarAway(int ticksToMoveForward) {
+		distanceToGo = ticksToMoveForward;
+		isGoingFarFarAway = true;
+	}
+	
+	@Override
+	protected String processReflexes() {
+		String old = super.processReflexes();
+		if (old != null && !old.equals(Names.EAT)) {
+			return old;
+		}
+		if (isGoingFarFarAway) {
+			distanceToGo--;
+			if (distanceToGo <= 0) {
+				isGoingFarFarAway = false;
+			}
+			return Names.MOVE;
+		}
+		//On reste a distance raisonnable d'un tank ennemi
+		EntityKnowledge nearestEnnemy = getKnowledgeBase().getNearestEnnemy();
+		if (nearestEnnemy != null && nearestEnnemy.getType().equals(Names.ROCKET_LAUNCHER)) {
+			if (getKnowledgeBase().getDistance(nearestEnnemy.getID()) <= WarRocketLauncher.RADIUS + 8) {
+				getEntity().getBrain().setHeading(getKnowledgeBase().getHeading(nearestEnnemy.getID()) + 180);
+				return Names.MOVE;
+			}
+		}
+		return null;
 	}
 
 	@Override
